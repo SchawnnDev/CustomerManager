@@ -60,12 +60,9 @@ namespace CustomerManager
 
         public static bool TableExists(string name, SqlConnection connection)
         {
-            //select case when exists((select * from information_schema.tables where table_name = '" + tableName + "')) then 1 else 0 end
-            //using (var cmd = new SqlCommand("SELECT object_id('@tableName')", connection))
             using (var cmd = new SqlCommand("select case when exists(select * from information_schema.tables where table_name=@tableName) then 1 else 0 end", connection))
             {
                 cmd.Parameters.AddWithValue("@tableName", name);
-                Console.WriteLine(cmd.CommandText);
                 return (int)cmd.ExecuteScalar() == 1;
             }
 
@@ -76,22 +73,39 @@ namespace CustomerManager
 
             Console.WriteLine("Checking tables...");
 
-
+            Console.Write("Table 'Customers': ");
             if (!TableExists("Customers", connection))
             {
-                Console.WriteLine(" Creating Customers...");
+                Console.WriteLine("Creating...");
 
                 using (var create = new SqlCommand("CREATE TABLE Customers(id int not null identity,firstname nvarchar(max),name nvarchar(max),dateofbirth date,phonenumber nvarchar(max),email nvarchar(max),PRIMARY KEY(id))", connection))
                 {
                     create.ExecuteNonQuery();
+                    Console.WriteLine("Table created!");
                 }
 
             }
             else
             {
-                Console.WriteLine(" Yep!");
+                Console.WriteLine("OK!");
             }
 
+            Console.Write("Table 'ShippingAddresses': ");
+            if (!TableExists("ShippingAddresses", connection))
+            {
+                Console.WriteLine("Creating...");
+
+                using (var create = new SqlCommand("CREATE TABLE ShippingAddresses(id int not null identity,customerid int,address nvarchar(max),postalcode nvarchar(max),PRIMARY KEY(id))", connection))
+                {
+                    create.ExecuteNonQuery();
+                    Console.WriteLine("Table created!");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("OK!");
+            }
 
         }
 
