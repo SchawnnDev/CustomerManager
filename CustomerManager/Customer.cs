@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomerManager
 {
@@ -14,6 +11,7 @@ namespace CustomerManager
         public DateTime DateOfBirth { get; private set; }
         public string PhoneNumber { get; private set; }
         public string Email { get; private set; }
+        public List<ShippingAddress> ShippingAddresses { get; }
 
         public Customer(string firstName, string name, DateTime dateOfBirth, string phoneNumber, string email)
         {
@@ -22,22 +20,38 @@ namespace CustomerManager
             DateOfBirth = dateOfBirth;
             PhoneNumber = phoneNumber;
             Email = email;
+            ShippingAddresses = new List<ShippingAddress>();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var customer = obj as Customer;
+            return customer != null && (Id != 0) ? Id == customer.Id : (FirstName == customer.FirstName && Name == customer.Name);
         }
     }
 
-    class CustomerShippingAddress
+    class ShippingAddress
     {
 
         public int CustomerId { get; set; }
+        public string FirstName { get; private set; }
+        public string Name { get; private set; }
         public string Address { get; private set; }
         public string PostalCode { get; private set; }
 
-        public CustomerShippingAddress(int customerId, string address, string postalCode)
+        public ShippingAddress(int customerId, string address, string postalCode)
         {
             CustomerId = customerId;
             Address = address;
             PostalCode = postalCode;
         }
+
+        public ShippingAddress(string firstName, string name, string address, string postalCode) : this(0, address, postalCode)
+        {
+            FirstName = firstName;
+            Name = name;
+        }
+
     }
 
 }
