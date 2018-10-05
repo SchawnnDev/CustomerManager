@@ -342,12 +342,12 @@ namespace CustomerManager
                 foreach (ShippingAddress shippingAddress in shippingAddresses)
                 {
 
-                    using (SqlCommand cmd = new SqlCommand("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into ShippingAddresses(customerid,address,postalcode) output inserted.id values (@customerid,@address,@postalcode) end", connection))
+                    using (SqlCommand cmd = new SqlCommand("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into ShippingAddresses(customerid,address,postalcode) values (@customerid,@address,@postalcode) end", connection))
                     {
                         cmd.Parameters.AddWithValue("@customerid", shippingAddress.CustomerId);
                         cmd.Parameters.AddWithValue("@address", shippingAddress.Address);
                         cmd.Parameters.AddWithValue("@postalcode", shippingAddress.PostalCode);
-                        var retour = cmd.ExecuteNonQuery();
+                        count += cmd.ExecuteNonQuery();
                     }
 
                 }
