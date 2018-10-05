@@ -16,7 +16,7 @@ namespace CustomerManager
 
         public static void Init()
         {
-            Console.WriteLine("Initializing Database..");
+            Console.WriteLine("[DB] Initializing Database..");
 
             try
             {
@@ -33,7 +33,7 @@ namespace CustomerManager
             }
             catch
             {
-                Console.WriteLine("WRONG DATASOURCE !!!");
+                Console.WriteLine("[DB] WRONG DATASOURCE !!!");
             }
 
 
@@ -76,11 +76,11 @@ namespace CustomerManager
 
             if (!DataManager.Contains(id))
             {
-                Console.WriteLine("User does not exist!");
+                Console.WriteLine("[DB] User does not exist!");
                 return;
             }
 
-            Console.Write("Deleting customer n°" + id + (shippingAddresses ? " with Shipping Addresses" : "") + "... ");
+            Console.Write("[DB] Deleting customer n°" + id + (shippingAddresses ? " with Shipping Addresses" : "") + "... ");
 
             using (var connection = CreateSqlConnection("", "", DatabaseName, DataSource, true))
             {
@@ -111,42 +111,65 @@ namespace CustomerManager
             }
         }
 
-        public static List<Customer> LoadData()
+        public static void LoadData()
         {
 
-            List<Customer> customers = new List<Customer>();
+            int addresses = 0, customers = 0;
 
-            Console.Write("Loading data from database... ");
+            Console.WriteLine("[DB] Loading data from database... ");
 
             using (var connection = CreateSqlConnection("", "", DatabaseName, DataSource, true))
             {
 
                 connection.Open();
 
-                var cmd = new SqlCommand("select id,firstname,name,dateofbirth,phonenumber,email from Customers", connection);
+                var cmd = new SqlCommand("select Customers.id,firstname,name,dateofbirth,phonenumber,email,ShippingAddresses.address, ShippingAddresses.postalcode from (Customers inner join ShippingAddresses on Customers.id=ShippingAddresses.customerid)", connection);
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        Customer customer = new Customer(reader["firstname"].ToString(), reader["name"].ToString(), (DateTime)reader["dateofbirth"], reader["phonenumber"].ToString(), reader["email"].ToString())
+
+                        // TODO: maybe check if id,firstname,name,... are not null
+                        int id = (int)reader["id"];
+                        var address = reader["address"];
+                        var postalCode = reader["postalcode"];
+                        Customer customer;
+
+                        if (!DataManager.Contains(id))
                         {
-                            Id = (int)reader["id"]
-                        };
-                        customers.Add(customer);
+
+                            customer = new Customer(reader["firstname"].ToString(), reader["name"].ToString(), (DateTime)reader["dateofbirth"], reader["phonenumber"].ToString(), reader["email"].ToString())
+                            {
+                                Id = (int)reader["id"]
+                            };
+
+                            DataManager.Customers.Add(customer);
+                            customers++;
+                        }
+                        else
+                        {
+                            customer = DataManager.Find(id);
+                        }
+
+                        if (customer != null && address != null && postalCode != null && DataManager.AddWithoutDoubles(customer, new ShippingAddress(id, address.ToString(), postalCode.ToString())) != null)
+                            addresses++;
+
                     }
                 }
 
-                connection.Close();
-
             }
 
-            if (customers.Count != 0)
-                Console.WriteLine(customers.Count + " elements found!");
+            if (customers != 0)
+                Console.WriteLine("[DB] " + customers + " customers found!");
             else
-                Console.WriteLine("Nothing found! :(");
+                Console.WriteLine("[DB] No customers found! :(");
 
-            return customers;
+            if (addresses != 0)
+                Console.WriteLine("[DB] " + addresses + " addresses found!");
+            else
+                Console.WriteLine("[DB] No addresses found! :(");
+
         }
 
         public static bool TableExists(string name, SqlConnection connection)
@@ -162,9 +185,9 @@ namespace CustomerManager
         public static void CheckTables(SqlConnection connection)
         {
 
-            Console.WriteLine("Checking tables...");
+            Console.WriteLine("[DB] Checking tables...");
 
-            Console.Write("Table 'Customers': ");
+            Console.Write("[DB] Table 'Customers': ");
             if (!TableExists("Customers", connection))
             {
                 Console.WriteLine("Creating...");
@@ -181,7 +204,7 @@ namespace CustomerManager
                 Console.WriteLine("OK!");
             }
 
-            Console.Write("Table 'ShippingAddresses': ");
+            Console.Write("[DB] Table 'ShippingAddresses': ");
             if (!TableExists("ShippingAddresses", connection))
             {
                 Console.WriteLine("Creating...");
@@ -204,7 +227,7 @@ namespace CustomerManager
         public static void Delete(DeleteType type, string name) // Isnt working (DDL OP)
         {
 
-            Console.Write("Trying to delete " + type.ToString().ToLower() + " " + name + "... ");
+            Console.Write("[DB] Trying to delete " + type.ToString().ToLower() + " " + name + "... ");
 
             using (var connection = CreateSqlConnection("", "", type == DeleteType.Table ? DatabaseName : "", DataSource, true))
             {
@@ -231,7 +254,7 @@ namespace CustomerManager
         public static void CheckDatabase(SqlConnection connection)
         {
 
-            Console.Write("Checking if " + DatabaseName + " database exists...");
+            Console.Write("[DB] Checking if " + DatabaseName + " database exists...");
 
             using (var cmd = new SqlCommand("SELECT db_id(@databaseName)", connection))
             {
@@ -242,7 +265,7 @@ namespace CustomerManager
                 {
                     Console.WriteLine(" Creating...");
 
-                    using (var create = new SqlCommand("Create database " + DatabaseName, connection))
+                    using (var create = new SqlCommand("Create database " + DatabaseName, connection)) //TODO: sql injection?
                     {
                         //create.Parameters.AddWithValue("@databaseName", DatabaseName);  // Isnt working (DDL OP)
                         create.ExecuteNonQuery();
@@ -315,13 +338,7 @@ namespace CustomerManager
                 foreach (ShippingAddress shippingAddress in shippingAddresses)
                 {
 
-                    ICommand cmd = new ICommand()
-                    {
-
-                    }
-                    new Command("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into Customers(customerid,address,postalcode) output inserted.id values (@customerid,@address,@postalcode) end", connection)
-
-                    using (SqlCommand cmd = new SqlCommand("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into Customers(customerid,address,postalcode) output inserted.id values (@customerid,@address,@postalcode) end", connection))
+                    using (SqlCommand cmd = new SqlCommand("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into ShippingAddresses(customerid,address,postalcode) output inserted.id values (@customerid,@address,@postalcode) end", connection))
                     {
                         cmd.Parameters.AddWithValue("@customerid", shippingAddress.CustomerId);
                         cmd.Parameters.AddWithValue("@address", shippingAddress.Address);
@@ -344,36 +361,6 @@ namespace CustomerManager
     {
         Table,
         Database
-    }
-
-    public class Command
-    {
-        public string Query { get; set; }
-        private ICommand Cmd { get; set; }
-        private SqlConnection Connection { get; set; }
-        public SqlCommand SqlCommand { get; }
-
-        public Command(string query, SqlConnection connection, ICommand command)
-        {
-            Query = query;
-            Connection = connection;
-            Cmd = command;
-        }
-
-        public SqlCommand Execute()
-        {
-            using (var command = new SqlCommand(Query, Connection))
-            {
-                Cmd.Execute(command);
-                return command;
-            }
-
-        }
-    }
-
-    public static interface ICommand
-    {
-        SqlCommand Execute(SqlCommand command);
     }
 
 }

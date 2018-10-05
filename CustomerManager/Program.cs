@@ -25,7 +25,8 @@ namespace CustomerManager
             Console.WriteLine("Loading app CustomerManager...");
 
             DBManager.Init();
-            DataManager.Init(DBManager.LoadData());
+            DataManager.Init();
+            DBManager.LoadData();
 
             Console.WriteLine("App is ready to use! :)");
 

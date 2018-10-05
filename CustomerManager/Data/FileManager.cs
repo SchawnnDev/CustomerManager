@@ -38,11 +38,11 @@ namespace CustomerManager.Data
             foreach (string customer in ReadFile(path).Skip(startLine).ToArray())
             {
                 string[] infos = customer.Split(',');
-                if (infos.Length >= 5)
+                if (infos.Length >= 4)
                     shippingAddresses.Add(new ShippingAddress(infos[0], infos[1], infos[2], infos[3]));
             }
 
-            Console.Write(shippingAddresses.Count + " found!");
+            Console.WriteLine(shippingAddresses.Count + " found!");
             return shippingAddresses;
         }
 

@@ -45,7 +45,6 @@ namespace CustomerManager.Utils
         {
             List<ShippingAddress> addresses = new List<ShippingAddress>();
 
-
             foreach (ShippingAddress shippingAddress in shippingAddresses) { 
                 ShippingAddress address = DataManager.AddWithoutDoubles(type == SearchType.Id ? DataManager.Find(shippingAddress.CustomerId) : DataManager.Find(shippingAddress.Name, shippingAddress.FirstName), shippingAddress);
                 if (address != null) addresses.Add(address);
@@ -57,7 +56,6 @@ namespace CustomerManager.Utils
         {
             return customer.Id != 0 && address.CustomerId != 0 ? SearchType.Id : SearchType.Name;
         }
-
 
     }
 

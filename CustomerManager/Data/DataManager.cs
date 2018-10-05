@@ -11,9 +11,14 @@ namespace CustomerManager.Data
 
         public static List<Customer> Customers { get; private set; }
 
-        public static void Init(List<Customer> customers)
+        public static void Init()
         {
-            Customers = customers;
+            Customers = new List<Customer>();
+        }
+
+        public static void Add(List<Customer> customers)
+        {
+            Customers.AddRange( customers );
         }
 
         public static void AddWithoutDoubles(List<Customer> customers)
@@ -24,6 +29,17 @@ namespace CustomerManager.Data
         }
         public static ShippingAddress AddWithoutDoubles(Customer customer, ShippingAddress shippingAddress)
         {
+
+            if (customer == null || shippingAddress == null) return null;
+
+            shippingAddress.CustomerId = customer.Id;
+
+            if (customer.ShippingAddresses.Count == 0)
+            {
+                Customers.Add(customer);
+                return shippingAddress;
+            }
+
             foreach (ShippingAddress address in customer.ShippingAddresses)
             {
                 if (shippingAddress.Address != address.Address && shippingAddress.PostalCode != address.PostalCode)
