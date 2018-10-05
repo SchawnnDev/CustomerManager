@@ -15,8 +15,7 @@ namespace CustomerManager
 
             DBManager.DatabaseName = "CustomerManager";
 
-            if (!IsValid(args))
-                return;
+            ExecuteCommands(args);
 
         }
 
@@ -32,7 +31,7 @@ namespace CustomerManager
 
         }
 
-        public static bool IsValid(string[] args)
+        public static bool ExecuteCommands(string[] args)
         {
 
             if (args.Length == 0)
@@ -54,6 +53,7 @@ namespace CustomerManager
                             Help();
                             return false;
                         }
+                        //TODO:
                         string[] a = args[0].Split(',');
                         DBManager.DataSource = a[0] + @"\" + a[1]; // Maybe check if its wrong?
                         break;
@@ -187,10 +187,6 @@ namespace CustomerManager
                 }
 
             }
-
-
-
-
 
             return true;
         }

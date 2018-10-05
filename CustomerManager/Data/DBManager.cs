@@ -315,6 +315,12 @@ namespace CustomerManager
                 foreach (ShippingAddress shippingAddress in shippingAddresses)
                 {
 
+                    ICommand cmd = new ICommand()
+                    {
+
+                    }
+                    new Command("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into Customers(customerid,address,postalcode) output inserted.id values (@customerid,@address,@postalcode) end", connection)
+
                     using (SqlCommand cmd = new SqlCommand("if not exists (select id from ShippingAddresses where customerid=@customerid and address=@address and postalcode=@postalcode) begin insert into Customers(customerid,address,postalcode) output inserted.id values (@customerid,@address,@postalcode) end", connection))
                     {
                         cmd.Parameters.AddWithValue("@customerid", shippingAddress.CustomerId);
@@ -338,6 +344,36 @@ namespace CustomerManager
     {
         Table,
         Database
+    }
+
+    public class Command
+    {
+        public string Query { get; set; }
+        private ICommand Cmd { get; set; }
+        private SqlConnection Connection { get; set; }
+        public SqlCommand SqlCommand { get; }
+
+        public Command(string query, SqlConnection connection, ICommand command)
+        {
+            Query = query;
+            Connection = connection;
+            Cmd = command;
+        }
+
+        public SqlCommand Execute()
+        {
+            using (var command = new SqlCommand(Query, Connection))
+            {
+                Cmd.Execute(command);
+                return command;
+            }
+
+        }
+    }
+
+    public static interface ICommand
+    {
+        SqlCommand Execute(SqlCommand command);
     }
 
 }
