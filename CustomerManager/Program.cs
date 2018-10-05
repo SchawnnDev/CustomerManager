@@ -66,6 +66,10 @@ namespace CustomerManager
             {
                 switch (args[1])
                 {
+                    case "display":
+                        Start();
+                        DataManager.DisplayData();
+                        return true;
                     case "reset":
                         DBManager.Reset();
                         Start();
@@ -194,13 +198,14 @@ namespace CustomerManager
 
         private static void Help()
         {
-            Console.WriteLine("Syntax: CustomerManager.exe [dataSource | ? | help] [start | import | reset | delete] [path | id] [options]");
+            Console.WriteLine("Syntax: CustomerManager.exe [dataSource | ? | help] [start | import | reset | delete | display] [path | id] [options]");
             Console.WriteLine("    ? or help:     Show help");
             Console.WriteLine("    dataSoure:     SQL Server");
             Console.WriteLine("    start:         Only start app");
             Console.WriteLine("    import:        Import infos from .csv file : import [path] [customer | address] [startLine]");
             Console.WriteLine("    delete:        Delete user & shipping addresses by id : delete [id]");
             Console.WriteLine("    reset:         Reset SQL Database");
+            Console.WriteLine("    display:       Display all data in DB.");
         }
 
 

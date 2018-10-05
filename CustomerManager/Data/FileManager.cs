@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CustomerManager.Data
 {
     class FileManager
     {
 
+        private static bool IsValid(string line, int normalLength)
+        {
+            return line != null && !line.All(ch => ch.Equals(' ')) && Regex.Matches(line, ",").Count == normalLength;
+        }
+
         public static List<Customer> ImportCustomers(string path, int startLine)
         {
 
             List<Customer> customers = new List<Customer>();
 
-            Console.Write("Searching customers in " + path + " ");
+            Console.Write("Searching customers in " + path + "... ");
 
             foreach (string customer in ReadFile(path).Skip(startLine).ToArray())
             {
+                if (!IsValid(customer, 4)) continue;
                 string[] infos = customer.Split(',');
                 if (infos.Length >= 5)
                     customers.Add(new Customer(infos[0], infos[1], DateTime.Parse(infos[2]), infos[3], infos[4]));
@@ -33,11 +38,12 @@ namespace CustomerManager.Data
 
             List<ShippingAddress> shippingAddresses = new List<ShippingAddress>();
 
-            Console.Write("Searching shipping addresses in " + path + " ");
+            Console.Write("Searching shipping addresses in " + path + "... ");
 
-            foreach (string customer in ReadFile(path).Skip(startLine).ToArray())
+            foreach (string address in ReadFile(path).Skip(startLine).ToArray())
             {
-                string[] infos = customer.Split(',');
+                if (!IsValid(address, 3)) continue;
+                string[] infos = address.Split(',');
                 if (infos.Length >= 4)
                     shippingAddresses.Add(new ShippingAddress(infos[0], infos[1], infos[2], infos[3]));
             }
@@ -46,7 +52,7 @@ namespace CustomerManager.Data
             return shippingAddresses;
         }
 
-        public static string[] ReadFile(string path)
+        private static string[] ReadFile(string path)
         {
             return File.ReadAllLines(path);
         }

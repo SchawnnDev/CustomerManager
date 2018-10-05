@@ -18,7 +18,7 @@ namespace CustomerManager.Data
 
         public static void Add(List<Customer> customers)
         {
-            Customers.AddRange( customers );
+            Customers.AddRange(customers);
         }
 
         public static void AddWithoutDoubles(List<Customer> customers)
@@ -34,27 +34,41 @@ namespace CustomerManager.Data
 
             shippingAddress.CustomerId = customer.Id;
 
-            if (customer.ShippingAddresses.Count == 0)
+            if (customer.Id == 0 || Contains(shippingAddress, customer))
             {
-                Customers.Add(customer);
-                return shippingAddress;
+                return null;
             }
 
-            foreach (ShippingAddress address in customer.ShippingAddresses)
-            {
-                if (shippingAddress.Address != address.Address && shippingAddress.PostalCode != address.PostalCode)
-                {
-                    Customers.Add(customer);
-                    return address;
-                }
-            }
-            return null;
+            customer.ShippingAddresses.Add(shippingAddress);
+            return shippingAddress;
+
         }
 
         public static bool Contains(Customer customer)
         {
             foreach (Customer cu in Customers)
                 if (customer.Equals(cu)) return true;
+            return false;
+        }
+
+        public static bool Contains(ShippingAddress shipping, Customer customer)
+        {
+
+            foreach (ShippingAddress address in customer.ShippingAddresses)
+                if (customer.Id == shipping.CustomerId && shipping.PostalCode == address.PostalCode && shipping.Address == address.Address)
+                    return true;
+
+            return false;
+        }
+
+        public static bool Contains(ShippingAddress shipping)
+        {
+
+            foreach (Customer customer in Customers)
+                foreach (ShippingAddress address in customer.ShippingAddresses)
+                    if (customer.Id == shipping.CustomerId && shipping.PostalCode == address.PostalCode && shipping.Address == address.Address)
+                        return true;
+
             return false;
         }
 
@@ -76,6 +90,27 @@ namespace CustomerManager.Data
             foreach (Customer customer in Customers)
                 if (customer.Name.Equals(name) && customer.FirstName.Equals(firstName)) return customer;
             return null;
+        }
+
+        public static void DisplayData()
+        {
+
+            foreach (Customer customer in Customers)
+            {
+
+                Console.WriteLine(customer.ToString());
+
+                foreach (ShippingAddress address in customer.ShippingAddresses)
+                {
+                    Console.WriteLine(address.ToString());
+                }
+
+                Console.WriteLine();
+
+            }
+
+
+
         }
 
     }

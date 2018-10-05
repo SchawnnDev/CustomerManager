@@ -28,6 +28,11 @@ namespace CustomerManager
             var customer = obj as Customer;
             return customer != null && (Id != 0) ? Id == customer.Id : (FirstName == customer.FirstName && Name == customer.Name);
         }
+
+        public override string ToString()
+        {
+            return "[" + Id + "] " + FirstName + " " + Name + ": " + DateOfBirth.ToShortDateString() + " | " + PhoneNumber + " | " + Email;
+        }
     }
 
     class ShippingAddress
@@ -50,6 +55,11 @@ namespace CustomerManager
         {
             FirstName = firstName;
             Name = name;
+        }
+
+        public override string ToString()
+        {
+            return "[" + CustomerId + "] " + Address + " | " + PostalCode;
         }
 
     }

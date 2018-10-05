@@ -123,7 +123,7 @@ namespace CustomerManager
 
                 connection.Open();
 
-                var cmd = new SqlCommand("select Customers.id,firstname,name,dateofbirth,phonenumber,email,ShippingAddresses.address, ShippingAddresses.postalcode from (Customers inner join ShippingAddresses on Customers.id=ShippingAddresses.customerid)", connection);
+                var cmd = new SqlCommand("select Customers.id,firstname,name,dateofbirth,phonenumber,email,ShippingAddresses.address, ShippingAddresses.postalcode from (Customers left join ShippingAddresses on Customers.id=ShippingAddresses.customerid)", connection);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -136,6 +136,9 @@ namespace CustomerManager
                         var postalCode = reader["postalcode"];
                         Customer customer;
 
+                        // Console.WriteLine("["+ id + "] " +reader["firstname"].ToString() + " " + reader["name"].ToString() + " " + ((DateTime)reader["dateofbirth"]).ToShortDateString() + " " + reader["email"].ToString() + " " + address + " " + postalCode);
+
+
                         if (!DataManager.Contains(id))
                         {
 
@@ -143,7 +146,6 @@ namespace CustomerManager
                             {
                                 Id = (int)reader["id"]
                             };
-
                             DataManager.Customers.Add(customer);
                             customers++;
                         }
@@ -152,7 +154,9 @@ namespace CustomerManager
                             customer = DataManager.Find(id);
                         }
 
-                        if (customer != null && address != null && postalCode != null && DataManager.AddWithoutDoubles(customer, new ShippingAddress(id, address.ToString(), postalCode.ToString())) != null)
+
+
+                        if (customer != null && address != DBNull.Value && postalCode != DBNull.Value && DataManager.AddWithoutDoubles(customer, new ShippingAddress(id, address.ToString(), postalCode.ToString())) != null)
                             addresses++;
 
                     }

@@ -9,7 +9,6 @@ namespace CustomerManager.Utils
 {
     class Utils
     {
-
         public static List<ShippingAddress> SearchShippingAddressesForCustomer(Customer customer, List<ShippingAddress> shippingAddresses, SearchType searchType)
         {
 
