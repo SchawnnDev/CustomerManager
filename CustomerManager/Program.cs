@@ -1,7 +1,10 @@
-﻿using CustomerManager.Data;
+﻿using CustomerManagement.Data;
+using CustomerManagement.Utils;
+using CustomerManager.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 
 namespace CustomerManager
 {
@@ -12,10 +15,17 @@ namespace CustomerManager
 
         static void Main(string[] args)
         {
+            DbManager.DatabaseName = "CustomerManager";
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            DBManager.DatabaseName = "CustomerManager";
-
-            ExecuteCommands(args);
+            try
+            {
+                ExecuteCommands(args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error occured: {e.Message}");
+            }
 
         }
 
@@ -24,9 +34,9 @@ namespace CustomerManager
 
             Console.WriteLine("Loading app CustomerManager...");
 
-            DBManager.Init();
+            DbManager.Init();
             DataManager.Init();
-            DBManager.LoadData();
+            DbManager.LoadData();
 
             Console.WriteLine("App is ready to use! :)");
 
@@ -54,9 +64,8 @@ namespace CustomerManager
                             Help();
                             return false;
                         }
-                        //TODO:
-                        string[] a = args[0].Split(',');
-                        DBManager.DataSource = a[0] + @"\" + a[1]; // Maybe check if its wrong?
+
+                        DbManager.DataSource = args[0];
                         break;
                 }
 
@@ -71,18 +80,18 @@ namespace CustomerManager
                         DataManager.DisplayData();
                         return true;
                     case "reset":
-                        DBManager.Reset();
+                        DbManager.Reset();
                         Start();
                         return true;
-                    case "start":
+                    case "test":
                         Console.WriteLine("Starting app...");
                         Start();
                         return true;
                     case "import":
-                        Console.WriteLine("Correct using : CustomerManager.exe [dataSource] [import] [path] [customer | address] [startLine]");
+                        SendCorrectUsage("CustomerManager.exe [dataSource] [import] [path] [customer | address] [startLine]");
                         return false;
                     case "delete":
-                        Console.WriteLine("Correct using : CustomerManager.exe [dataSource] [delete] [id]");
+                        SendCorrectUsage("CustomerManager.exe [dataSource] [delete] [id]");
                         return false;
                     default:
                         Help();
@@ -96,19 +105,18 @@ namespace CustomerManager
 
                     if (!int.TryParse(args[2], out int id))
                     {
-                        Console.WriteLine("Correct using : CustomerManager.exe [dataSource] [delete] [id]");
-                        Console.WriteLine("ID MUST BE AN VALID NUMBER!!");
-                        return false;
+                        SendCorrectUsage("CustomerManager.exe [dataSource] [delete] [id]");
+                        throw new ApplicationException("ID must be a valid number.");
                     }
 
                     Start();
-                    DBManager.DeleteCustomer(id, true);
+                    DbManager.DeleteCustomer(id, true);
 
                     return true;
                 }
                 else if (args[1].Equals("import"))
                 {
-                    Console.WriteLine("Correct using : CustomerManager.exe [dataSource] [import] [path] [customer | address]  [startLine]");
+                    SendCorrectUsage("CustomerManager.exe [dataSource] [import] [path] [customer | address]  [startLine]");
                     return false;
                 }
                 else
@@ -119,76 +127,50 @@ namespace CustomerManager
             }
             else if (args.Length == 4 && args[1].Equals("import"))
             {
-                Console.WriteLine("Correct using : CustomerManager.exe [dataSource] [import] [path] [customer | address]  [startLine]");
+                SendCorrectUsage("CustomerManager.exe [dataSource] [import] [path] [customer | address]  [startLine]");
                 return false;
             }
             else if (args.Length == 5)
             {
 
-                if (args[1].Equals("import"))
-                {
-
-                    if (File.Exists(args[2]))
-                    {
-
-                        if (int.TryParse(args[4], out int startLine))
-                        {
-
-                            string type = args[3];
-
-                            if (type.Equals("customer"))
-                            {
-
-                                Start();
-                                List<Customer> customers = FileManager.ImportCustomers(args[2], startLine);
-                                Console.WriteLine("Imported " + customers.Count + " customers from " + args[2]);
-                                DataManager.AddWithoutDoubles(customers);
-                                int count = DBManager.SaveCustomersToDB(customers);
-                                Console.WriteLine("Saved " + count + " customers to db!");
-                                return true;
-                            }
-                            else if (type.Equals("address"))
-                            {
-                                Start();
-                                List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(args[2], startLine);
-                                Console.WriteLine("Imported " + shippingAddresses.Count + " shipping addresses from " + args[2]);
-                                List<ShippingAddress> toBeSaved = Utils.Utils.SearchCustomersForShippingAddresses(shippingAddresses, Utils.SearchType.Name);
-
-                                if (toBeSaved.Count != 0)
-                                {
-                                    Console.Write("Trying to save " + toBeSaved.Count + " shipping addresses to DB... ");
-                                    int count = DBManager.SaveShippingAddressesToDB(toBeSaved);
-                                    Console.WriteLine("Success! " + count + " have been saved!");
-                                }
-                                else
-                                    Console.WriteLine("No customers were found for these addresses! Please import them before!");
-
-                                return true;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Type does not exist!");
-                            }
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("StartLine must be a number !");
-                        }
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("File does not exist!");
-                    }
-
-                    return false;
-
-                }
-                else
+                if (!args[1].Equals("import"))
                 {
                     Help();
                     return false;
+                }
+
+                if (!File.Exists(args[2]))
+                    throw new ApplicationException("File does not exist.");
+                if (!int.TryParse(args[4], out int startLine))
+                    throw new ApplicationException("StartLine must be a number.");
+
+                switch (args[3])
+                {
+                    case "customer":
+                        Start();
+                        List<Customer> customers = FileManager.ImportCustomers(args[2], startLine);
+                        Console.WriteLine($"Imported {customers.Count} customers from {args[2]}");
+                        DataManager.AddWithoutDoubles(customers);
+                        Console.WriteLine($"Saved {DbManager.SaveCustomersToDB(customers)} customers to db!");
+                        return true;
+                    case "address":
+                        Start();
+                        List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(args[2], startLine);
+                        Console.WriteLine($"Imported {shippingAddresses.Count} shipping addresses from {args[2]}");
+                        List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(shippingAddresses, SearchType.Name);
+
+                        if (toBeSaved.Count != 0)
+                        {
+                            Console.Write($"Trying to save {toBeSaved.Count} shipping addresses to DB... ");
+                            Console.WriteLine($"Success! {DbManager.SaveShippingAddressesToDB(toBeSaved)} have been saved!");
+                        }
+                        else
+                            Console.WriteLine("No customers were found for these addresses! Please import them before!");
+
+                        return true;
+                    default:
+                        Console.WriteLine("Type does not exist!");
+                        return false;
                 }
 
             }
@@ -198,14 +180,19 @@ namespace CustomerManager
 
         private static void Help()
         {
-            Console.WriteLine("Syntax: CustomerManager.exe [dataSource | ? | help] [start | import | reset | delete | display] [path | id] [options]");
+            Console.WriteLine("Syntax: CustomerManager.exe [dataSource | ? | help] [test | import | reset | delete | display] [path | id] [options]");
             Console.WriteLine("    ? or help:     Show help");
-            Console.WriteLine("    dataSoure:     SQL Server");
+            Console.WriteLine("    dataSoure:     SQL Server Name, Data Source name");
             Console.WriteLine("    start:         Only start app");
             Console.WriteLine("    import:        Import infos from .csv file : import [path] [customer | address] [startLine]");
             Console.WriteLine("    delete:        Delete user & shipping addresses by id : delete [id]");
             Console.WriteLine("    reset:         Reset SQL Database");
             Console.WriteLine("    display:       Display all data in DB.");
+        }
+
+        private static void SendCorrectUsage(string text)
+        {
+            Console.WriteLine($"Correct usage: {text}");
         }
 
 

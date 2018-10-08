@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerManagement.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CustomerManager.Data
 {
-    class FileManager
+    public class FileManager
     {
 
         private static bool IsValid(string line, int normalLength)
@@ -19,9 +20,9 @@ namespace CustomerManager.Data
 
             List<Customer> customers = new List<Customer>();
 
-            Console.Write("Searching customers in " + path + "... ");
+            Console.Write($"Searching customers in { path }... ");
 
-            foreach (string customer in ReadFile(path).Skip(startLine).ToArray())
+            foreach (string customer in ReadFile(path).Skip(startLine + 1).ToArray())
             {
                 if (!IsValid(customer, 4)) continue;
                 string[] infos = customer.Split(',');
@@ -29,7 +30,7 @@ namespace CustomerManager.Data
                     customers.Add(new Customer(infos[0], infos[1], DateTime.Parse(infos[2]), infos[3], infos[4]));
             }
 
-            Console.WriteLine(customers.Count + " found!");
+            Console.WriteLine($"{customers.Count} found!");
             return customers;
         }
 
@@ -38,9 +39,9 @@ namespace CustomerManager.Data
 
             List<ShippingAddress> shippingAddresses = new List<ShippingAddress>();
 
-            Console.Write("Searching shipping addresses in " + path + "... ");
+            Console.Write($"Searching shipping addresses in {path}... ");
 
-            foreach (string address in ReadFile(path).Skip(startLine).ToArray())
+            foreach (string address in ReadFile(path).Skip(startLine + 1).ToArray())
             {
                 if (!IsValid(address, 3)) continue;
                 string[] infos = address.Split(',');
@@ -48,7 +49,7 @@ namespace CustomerManager.Data
                     shippingAddresses.Add(new ShippingAddress(infos[0], infos[1], infos[2], infos[3]));
             }
 
-            Console.WriteLine(shippingAddresses.Count + " found!");
+            Console.WriteLine($"{shippingAddresses.Count} found!");
             return shippingAddresses;
         }
 

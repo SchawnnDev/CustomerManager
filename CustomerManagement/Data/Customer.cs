@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CustomerManager
+namespace CustomerManagement.Data
 {
-    class Customer
+    public class Customer
     {
         public int Id { get; set; }
         public string FirstName { get; private set; }
@@ -29,37 +29,27 @@ namespace CustomerManager
             return customer != null && (Id != 0) ? Id == customer.Id : (FirstName == customer.FirstName && Name == customer.Name);
         }
 
-        public override string ToString()
+        public string[] ToArray()
         {
-            return "[" + Id + "] " + FirstName + " " + Name + ": " + DateOfBirth.ToShortDateString() + " | " + PhoneNumber + " | " + Email;
-        }
-    }
-
-    class ShippingAddress
-    {
-
-        public int CustomerId { get; set; }
-        public string FirstName { get; private set; }
-        public string Name { get; private set; }
-        public string Address { get; private set; }
-        public string PostalCode { get; private set; }
-
-        public ShippingAddress(int customerId, string address, string postalCode)
-        {
-            CustomerId = customerId;
-            Address = address;
-            PostalCode = postalCode;
-        }
-
-        public ShippingAddress(string firstName, string name, string address, string postalCode) : this(0, address, postalCode)
-        {
-            FirstName = firstName;
-            Name = name;
+            return new string[]
+            {
+                Id.ToString(),
+                FirstName,
+                Name,
+                DateOfBirth.ToShortDateString(),
+                PhoneNumber,
+                Email
+            };
         }
 
         public override string ToString()
         {
-            return "[" + CustomerId + "] " + Address + " | " + PostalCode;
+            return $"[{Id}] {FirstName} {Name}: {DateOfBirth.ToShortDateString()} | {PhoneNumber} | {Email}";
+        }
+
+        public bool HasShippingAddresses()
+        {
+            return ShippingAddresses.Count != 0;
         }
 
     }

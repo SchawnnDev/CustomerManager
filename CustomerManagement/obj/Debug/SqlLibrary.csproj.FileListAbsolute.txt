@@ -1,0 +1,6 @@
+C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\bin\Debug\SqlLibrary.dll
+C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\bin\Debug\SqlLibrary.pdb
+C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\obj\Debug\SqlLibrary.csprojAssemblyReference.cache
+C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\obj\Debug\SqlLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\obj\Debug\SqlLibrary.dll
+C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\obj\Debug\SqlLibrary.pdb

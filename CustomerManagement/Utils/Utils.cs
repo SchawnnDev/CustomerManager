@@ -1,13 +1,14 @@
-﻿using CustomerManager.Data;
+﻿using CustomerManagement.Data;
+using CustomerManager.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Utils
+namespace CustomerManagement.Utils
 {
-    class Utils
+    public class Utils
     {
         public static List<ShippingAddress> SearchShippingAddressesForCustomer(Customer customer, List<ShippingAddress> shippingAddresses, SearchType searchType)
         {
@@ -44,7 +45,8 @@ namespace CustomerManager.Utils
         {
             List<ShippingAddress> addresses = new List<ShippingAddress>();
 
-            foreach (ShippingAddress shippingAddress in shippingAddresses) { 
+            foreach (ShippingAddress shippingAddress in shippingAddresses)
+            {
                 ShippingAddress address = DataManager.AddWithoutDoubles(type == SearchType.Id ? DataManager.Find(shippingAddress.CustomerId) : DataManager.Find(shippingAddress.Name, shippingAddress.FirstName), shippingAddress);
                 if (address != null) addresses.Add(address);
             }
@@ -58,7 +60,7 @@ namespace CustomerManager.Utils
 
     }
 
-    enum SearchType
+    public enum SearchType
     {
         Id, Name, Variable
     }
