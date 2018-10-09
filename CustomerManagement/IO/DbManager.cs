@@ -29,9 +29,7 @@ namespace CustomerManagement.Data
                 using (var connection = CreateSqlConnection("", DataSource))
                 {
 
-                    connection.Open();
-
-                    DbLogWrite("Checking database & tables...");
+                    DbLogWriteLine("Checking database & tables...");
 
                     LoadAndExecuteSQLScript("CustomerManagement.SQL.InitializeDatabase.sql", connection);
 
@@ -40,9 +38,9 @@ namespace CustomerManagement.Data
 
                 }
             }
-            catch
+            catch (Exception e)
             {
-                DbLogWriteLine("Wrong Data Source.");
+                DbLogWriteLine($"Error occurred: {e.Message}");
             }
 
 
@@ -54,7 +52,6 @@ namespace CustomerManagement.Data
 
             using (var connection = CreateSqlConnection("", DataSource))
             {
-                connection.Open();
                 LoadAndExecuteSQLScript("CustomerManagement.SQL.DropDatabase.sql", connection);
             }
 
