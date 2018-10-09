@@ -1,9 +1,13 @@
 ﻿using CustomerManagement.Data;
 using CustomerManager.Data;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +22,7 @@ namespace CustomerManagement.Data
         public static void Init()
         {
             DbLogWriteLine("Initializing Database..");
+            DatabaseName = "CustomerManager";
 
             try
             {
@@ -26,9 +31,12 @@ namespace CustomerManagement.Data
 
                     connection.Open();
 
-                    CheckDatabase(connection);
+                    DbLogWrite("Checking database & tables...");
 
-                    CheckTables(connection);
+                    LoadAndExecuteSQLScript("CustomerManagement.SQL.InitializeDatabase.sql", connection);
+
+                    connection.ChangeDatabase("CustomerManager");
+
 
                 }
             }
@@ -40,14 +48,15 @@ namespace CustomerManagement.Data
 
         }
 
-
         public static void Reset()
         {
-            Console.WriteLine("Resetting database... ");
+            DbLogWriteLine("Resetting database... ");
 
-            Delete(DeleteType.Database, DatabaseName);
-
-            Console.WriteLine("Successful.");
+            using (var connection = CreateSqlConnection("", DataSource))
+            {
+                connection.Open();
+                LoadAndExecuteSQLScript("CustomerManagement.SQL.DropDatabase.sql", connection);
+            }
 
         }
 
@@ -82,7 +91,7 @@ namespace CustomerManagement.Data
 
 
 
-        public static void DeleteCustomer(int id, bool shippingAddresses)
+        public static void DeleteCustomer(int id)
         {
 
             Customer customer = DataManager.Find(id);
@@ -93,7 +102,7 @@ namespace CustomerManagement.Data
                 return;
             }
 
-            DbLogWrite($"Deleting customer n°{ id}{(shippingAddresses ? " with Shipping Addresses" : "")}... ");
+            DbLogWrite($"Deleting customer n°{ id}... ");
 
             using (var connection = CreateSqlConnection(DatabaseName, DataSource))
             {
@@ -141,14 +150,10 @@ namespace CustomerManagement.Data
                     while (reader.Read())
                     {
 
-                        // TODO: maybe check if id,firstname,name,... are not null
                         int id = (int)reader["id"];
                         var address = reader["address"];
                         var postalCode = reader["postalcode"];
                         Customer customer;
-
-                        // Console.WriteLine("["+ id + "] " +reader["firstname"].ToString() + " " + reader["name"].ToString() + " " + ((DateTime)reader["dateofbirth"]).ToShortDateString() + " " + reader["email"].ToString() + " " + address + " " + postalCode);
-
 
                         if (!DataManager.Contains(id))
                         {
@@ -194,81 +199,6 @@ namespace CustomerManagement.Data
             }
 
         }
-
-        public static void CheckTables(SqlConnection connection)
-        {
-
-            DbLogWriteLine("Checking tables...");
-
-            DbLogWrite("Table 'Customers': ");
-            if (!TableExists("Customers", connection))
-            {
-                Console.WriteLine("Creating...");
-
-                using (var create = new SqlCommand("create table Customers(id int not null identity,firstname nvarchar(max),name nvarchar(max),dateofbirth date,phonenumber nvarchar(max),email nvarchar(max),PRIMARY KEY(id))", connection))
-                {
-                    create.ExecuteNonQuery();
-                    Console.WriteLine("Table created.");
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("OK.");
-            }
-
-            DbLogWrite("Table 'ShippingAddresses': ");
-            if (!TableExists("ShippingAddresses", connection))
-            {
-                Console.WriteLine("Creating...");
-
-                using (var create = new SqlCommand("create table ShippingAddresses(id int not null identity,customerid int,address nvarchar(max),postalcode nvarchar(max),PRIMARY KEY(id), FOREIGN KEY (customerid) REFERENCES Customers(id)) ", connection))
-                {
-                    create.ExecuteNonQuery();
-                    Console.WriteLine("Table created.");
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("OK.");
-            }
-
-        }
-
-
-        public static void Delete(DeleteType type, string name)
-        {
-
-            DbLogWrite($"Trying to delete {type.ToString().ToLower()} {name}... ");
-
-            using (var connection = CreateSqlConnection(type == DeleteType.Table ? DatabaseName : "", DataSource))
-            {
-
-                connection.Open();
-
-                if (type == DeleteType.Database)
-                    using (var cmd = new SqlCommand($"alter database {name} set single_user with rollback immediate"))
-                        cmd.ExecuteNonQuery();
-
-
-                using (var cmd = new SqlCommand($"drop { type.ToString() } { name}", connection)) // waiting to find another way
-                {
-
-                    //cmd.Parameters.AddWithValue("@name", name);
-
-                    if (cmd.ExecuteNonQuery() != 0)
-                        Console.WriteLine("Success.");
-                    else
-                        Console.WriteLine("ERROR.");
-
-                }
-
-
-            }
-
-        }
-
 
         public static SqlConnection CreateSqlConnection(string initialCatalog, string dataSource)
         {
@@ -359,32 +289,18 @@ namespace CustomerManagement.Data
 
         }
 
-        public static void CheckDatabase(SqlConnection connection)
+        public static void LoadAndExecuteSQLScript(string path, SqlConnection connection)
         {
 
-            DbLogWrite($"Checking if {DatabaseName} database exists...");
+            Server server = new Server(new ServerConnection(connection));
+            var assembly = Assembly.GetExecutingAssembly();
 
-            using (var cmd = new SqlCommand("SELECT db_id(@databaseName)", connection))
+            using (var stream = assembly.GetManifestResourceStream(path))
+            using (var reader = new StreamReader(stream))
             {
-
-                cmd.Parameters.AddWithValue("@databaseName", DatabaseName);
-
-                if (cmd.ExecuteScalar() == DBNull.Value)
-                {
-                    Console.WriteLine(" Creating...");
-
-                    using (var create = new SqlCommand($"Create database { DatabaseName }", connection)) //TODO: sql injection?
-                        create.ExecuteNonQuery();
-
-                }
-                else
-                {
-                    Console.WriteLine(" Yep!");
-                }
-
+                string result = reader.ReadToEnd();
+                server.ConnectionContext.ExecuteNonQuery(result);
             }
-
-            connection.ChangeDatabase(DatabaseName);
 
         }
 

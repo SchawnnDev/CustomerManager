@@ -4,7 +4,6 @@ using CustomerManager.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows;
 
 namespace CustomerManager
 {
@@ -24,7 +23,7 @@ namespace CustomerManager
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error occured: {e.Message}");
+                Console.WriteLine($"Error occurred: {e.Message}");
             }
 
         }
@@ -88,10 +87,10 @@ namespace CustomerManager
                         Start();
                         return true;
                     case "import":
-                        SendCorrectUsage("CustomerManager.exe [dataSource] [import] [path] [customer | address] [startLine]");
+                        SendCorrectUsage("[import] [path] [customer | address] [startLine]");
                         return false;
                     case "delete":
-                        SendCorrectUsage("CustomerManager.exe [dataSource] [delete] [id]");
+                        SendCorrectUsage("[delete] [customer | address] [id]");
                         return false;
                     default:
                         Help();
@@ -100,35 +99,63 @@ namespace CustomerManager
             }
             else if (args.Length == 3)
             {
-                if (args[1].Equals("delete"))
-                {
 
-                    if (!int.TryParse(args[2], out int id))
-                    {
-                        SendCorrectUsage("CustomerManager.exe [dataSource] [delete] [id]");
-                        throw new ApplicationException("ID must be a valid number.");
-                    }
-
-                    Start();
-                    DbManager.DeleteCustomer(id, true);
-
-                    return true;
-                }
-                else if (args[1].Equals("import"))
+                switch (args[1])
                 {
-                    SendCorrectUsage("CustomerManager.exe [dataSource] [import] [path] [customer | address]  [startLine]");
-                    return false;
+                    case "delete":
+                        SendCorrectUsage("[delete] [customer | address] [id]");
+                        break;
+                    case "import":
+                        SendCorrectUsage("[import] [path] [customer | address]  [startLine]");
+                        break;
+                    default:
+                        Help();
+                        break;
                 }
-                else
-                {
-                    Help();
-                    return false;
-                }
-            }
-            else if (args.Length == 4 && args[1].Equals("import"))
-            {
-                SendCorrectUsage("CustomerManager.exe [dataSource] [import] [path] [customer | address]  [startLine]");
+
                 return false;
+
+
+
+            }
+            else if (args.Length == 4)
+            {
+
+                switch (args[1])
+                {
+                    case "import":
+                        SendCorrectUsage("[import] [path] [customer | address]  [startLine]");
+                        return false;
+                    case "delete":
+
+                        if (!int.TryParse(args[3], out int id))
+                        {
+                            SendCorrectUsage("[delete] [customer | address] [id]");
+                            throw new ApplicationException("ID must be a valid number.");
+                        }
+
+
+                        switch(args[2])
+                        {
+                            case "customer":
+                                DbManager.DeleteCustomer(id);
+                                break;
+
+                            case "address":
+                                DbManager.DeleteShippingAddress(id);
+                                break;
+
+                            default:
+                                SendCorrectUsage("[delete] [customer | address] [id]");
+                                throw new ApplicationException("Argument n3 must be 'customer' or 'address'.");
+
+                        }
+
+                        Start();
+                        return true;
+
+
+                }
             }
             else if (args.Length == 5)
             {
@@ -185,14 +212,14 @@ namespace CustomerManager
             Console.WriteLine("    dataSoure:     SQL Server Name, Data Source name");
             Console.WriteLine("    start:         Only start app");
             Console.WriteLine("    import:        Import infos from .csv file : import [path] [customer | address] [startLine]");
-            Console.WriteLine("    delete:        Delete user & shipping addresses by id : delete [id]");
+            Console.WriteLine("    delete:        Delete user or shipping addresses by id : delete [customer | address] [id]");
             Console.WriteLine("    reset:         Reset SQL Database");
             Console.WriteLine("    display:       Display all data in DB.");
         }
 
         private static void SendCorrectUsage(string text)
         {
-            Console.WriteLine($"Correct usage: {text}");
+            Console.WriteLine($"Correct usage: CustomerManager.exe [dataSource] {text}");
         }
 
 

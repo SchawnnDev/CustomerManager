@@ -71,7 +71,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CustomerManagement\CustomerManagement.csproj">
+      <Project>{72452ece-d927-4ee5-ba3b-dd1a7eb53923}</Project>
+      <Name>CustomerManagement</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
@@ -83,12 +88,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SqlLibrary\CustomerManagement.csproj">
-      <Project>{72452ECE-D927-4EE5-BA3B-DD1A7EB53923}</Project>
-      <Name>CustomerManagement</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

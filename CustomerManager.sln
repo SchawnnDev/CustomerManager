@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManager", "CustomerManager\CustomerManager.csproj", "{0264E371-48E4-47F4-A406-BF2916F76792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement", "SqlLibrary\CustomerManagement.csproj", "{72452ECE-D927-4EE5-BA3B-DD1A7EB53923}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement", "CustomerManagement\CustomerManagement.csproj", "{72452ECE-D927-4EE5-BA3B-DD1A7EB53923}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagerApp", "CustomerManagerApp\CustomerManagerApp.csproj", "{21486725-F140-4524-8699-DAE7A80B2C26}"
 EndProject
