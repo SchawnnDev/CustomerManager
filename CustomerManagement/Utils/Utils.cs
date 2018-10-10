@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CustomerManagement.Utils
@@ -53,10 +54,22 @@ namespace CustomerManagement.Utils
             return addresses;
         }
 
-        public static SearchType FindCorrectSearchType(Customer customer, ShippingAddress address)
+        public static SearchType FindCorrectSearchType(Customer customer, ShippingAddress address) => customer.Id != 0 && address.CustomerId != 0 ? SearchType.Id : SearchType.Name;
+
+        public static bool IsValidEmail(string email)
         {
-            return customer.Id != 0 && address.CustomerId != 0 ? SearchType.Id : SearchType.Name;
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
+
+        public static bool IsAlphanumeric(string str) => !string.IsNullOrWhiteSpace(str) && Regex.IsMatch(str, @"^[a-zA-Z]+$");
 
     }
 

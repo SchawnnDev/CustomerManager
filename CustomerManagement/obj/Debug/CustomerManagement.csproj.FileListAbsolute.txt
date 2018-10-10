@@ -6,10 +6,6 @@ C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\obj\Debug\CustomerManagem
 C:\Users\Meyer\source\repos\CustomerManager\SqlLibrary\obj\Debug\CustomerManagement.pdb
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\CustomerManagement.dll
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\CustomerManagement.pdb
-C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.csprojAssemblyReference.cache
-C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.csproj.CoreCompileInputs.cache
-C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.dll
-C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.pdb
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microsoft.SqlServer.AzureStorageEnum.dll
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microsoft.SqlServer.BatchParserClient.dll
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microsoft.SqlServer.ConnectionInfo.dll
@@ -64,4 +60,8 @@ C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microso
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microsoft.SqlServer.SqlWmiManagement.xml
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microsoft.SqlServer.Types.xml
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\bin\Debug\Microsoft.SqlServer.WmiEnum.xml
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.csproj.CoreCompileInputs.cache
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.csproj.CopyComplete
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.dll
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.pdb
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagement\obj\Debug\CustomerManagement.csprojAssemblyReference.cache

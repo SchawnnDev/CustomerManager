@@ -51,8 +51,48 @@ namespace CustomerManagement.Data
             DbLogWriteLine("Resetting database... ");
 
             using (var connection = CreateSqlConnection("", DataSource))
-            {
                 LoadAndExecuteSQLScript("CustomerManagement.SQL.DropDatabase.sql", connection);
+
+        }
+
+        public static void UpdateCustomer(Customer customer)
+        {
+
+            using (var connection = CreateSqlConnection(DatabaseName, DataSource))
+            {
+                connection.Open();
+
+                using (var cmd = new SqlCommand("update Customers set name=@name,firstname=@firstname,dateofbirth=@dateofbirth,phonenumber=@phonenumber,email=@email where id=@id", connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", customer.Id);
+                    cmd.Parameters.AddWithValue("@name", customer.Name);
+                    cmd.Parameters.AddWithValue("@firstname", customer.FirstName);
+                    cmd.Parameters.AddWithValue("@dateofbirth", customer.DateOfBirth);
+                    cmd.Parameters.AddWithValue("@phonenumber", customer.PhoneNumber);
+                    cmd.Parameters.AddWithValue("@email", customer.Email);
+                    cmd.ExecuteNonQuery();
+                }
+
+            }
+
+        }
+
+        public static void UpdateShippingAddress(ShippingAddress address)
+        {
+
+            using (var connection = CreateSqlConnection(DatabaseName, DataSource))
+            {
+                connection.Open();
+
+                using (var cmd = new SqlCommand("update ShippingAddresses set customerid=@customerid,address=@address,postalcode=@postalcode where id=@id", connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", address.Id);
+                    cmd.Parameters.AddWithValue("@customerid", address.CustomerId);
+                    cmd.Parameters.AddWithValue("@address", address.Address);
+                    cmd.Parameters.AddWithValue("@postalcode",address.PostalCode);
+                    cmd.ExecuteNonQuery();
+                }
+
             }
 
         }

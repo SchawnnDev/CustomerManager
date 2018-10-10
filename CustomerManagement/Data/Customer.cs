@@ -6,12 +6,17 @@ namespace CustomerManagement.Data
     public class Customer
     {
         public int Id { get; set; }
-        public string FirstName { get; private set; }
-        public string Name { get; private set; }
-        public DateTime DateOfBirth { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public string Email { get; private set; }
+        public string FirstName { get; set; }
+        public string Name { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
         public List<ShippingAddress> ShippingAddresses { get; }
+
+        public Customer()
+        {
+
+        }
 
         public Customer(string firstName, string name, DateTime dateOfBirth, string phoneNumber, string email)
         {

@@ -22,7 +22,7 @@ namespace CustomerManager.Data
 
             Console.Write($"Searching customers in { path }... ");
 
-            foreach (string customer in ReadFile(path).Skip(startLine + 1).ToArray())
+            foreach (string customer in ReadFile(path).Skip(startLine - 1).ToArray())
             {
                 if (!IsValid(customer, 4)) continue;
                 string[] infos = customer.Split(',');
@@ -41,7 +41,7 @@ namespace CustomerManager.Data
 
             Console.Write($"Searching shipping addresses in {path}... ");
 
-            foreach (string address in ReadFile(path).Skip(startLine + 1).ToArray())
+            foreach (string address in ReadFile(path).Skip(startLine - 1).ToArray())
             {
                 if (!IsValid(address, 3)) continue;
                 string[] infos = address.Split(',');
