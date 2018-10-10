@@ -1,0 +1,38 @@
+﻿<Window x:Class="CustomerManagerApp.Graphics.Windows.CustomerList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:CustomerManagerApp.Graphics.Models"
+        mc:Ignorable="d"
+        Title="Customer List" Height="450" Width="800"
+        d:DataContext="{models:CustomerListModel}"
+        ResizeMode="CanMinimize">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel VerticalAlignment="Stretch">
+
+            <DataGrid ItemsSource="{Binding Customers}" IsReadOnly="True" x:Name="CustomersGrid" HorizontalAlignment="Left" Height="450" VerticalAlignment="Top" Width="800" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Date Of Birth" Binding="{Binding DateOfBirth, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+                </DataGrid.Columns>
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Display Shipping Addresses" Click="DisplayShippingAddresses_Click" />
+                        <Separator/>
+                        <MenuItem Header="Edit" Click="EditCustomer_Click" />
+                        <MenuItem Header="Delete" Click="DeleteCustomer_Click" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+
+            </DataGrid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</Window>

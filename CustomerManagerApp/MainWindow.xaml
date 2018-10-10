@@ -1,0 +1,41 @@
+﻿<Window x:Name="CustomerManager" x:Class="CustomerManagerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomerManagerApp"
+        mc:Ignorable="d"
+        Title="CustomerManager" Height="450" Width="800">
+    <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Fichier">
+                    <MenuItem x:Name="settings" Header="_Paramètres" InputGestureText="Ctrl+S"  Click="MenuSettings_Click"/>
+                    <MenuItem x:Name="quitApp" Header="_Quitter" Click="QuitApp_Click" />
+                </MenuItem>
+                <MenuItem Header="_Données">
+
+                    <MenuItem x:Name="import" Header="_Importer">
+                        <MenuItem x:Name="ImportCustomer" Header="_Customers" Click="ImportCustomer_Click"/>
+                        <MenuItem x:Name="ImportShippingAddress" Header="_Shipping Addresses" Click="ImportShippingAddress_Click"/>
+                    </MenuItem>
+
+                    <MenuItem x:Name="export" Header="_Exporter" InputGestureText="Ctrl+E"/>
+
+
+                    <MenuItem x:Name="reset" Header="_Remettre à zéro"/>
+
+                    <!--
+                    <MenuItem x:Name="dbSettings" Header="_Paramètres" InputGestureText="Ctrl+S"/>
+                    -->
+                </MenuItem>
+                <MenuItem Header="_A propos" HorizontalAlignment="Center" Click="MenuItem_Click"/>
+            </Menu>
+
+            <!-- <TextBox x:Name="txtBoxDoc" Height="290" Width="500"/>-->
+        </DockPanel>
+
+        <Frame x:Name="Main" Margin="0,20.93,0,0" Height="400"/>
+
+    </Grid>
+</Window>
