@@ -69,7 +69,15 @@ namespace CustomerManagement.Utils
             }
         }
 
-        public static bool IsAlphanumeric(string str) => !string.IsNullOrWhiteSpace(str) && Regex.IsMatch(str, @"^[a-zA-Z]+$");
+        public static bool IsAlphanumeric(string str)
+        {
+            return !string.IsNullOrWhiteSpace(str) && Regex.IsMatch(str, @"^[a-zA-ZÀ-ž]+$");
+        }
+
+        public static bool DateEquals(DateTime date, DateTime other)
+        {
+            return date.Year == other.Year && date.Month == other.Month && date.Day == other.Day;
+        }
 
     }
 

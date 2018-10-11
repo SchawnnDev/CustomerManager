@@ -1,5 +1,6 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Utils;
+using CustomerManager.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,20 +27,21 @@ namespace CustomerManagerApp.Graphics.Windows
         private bool CancelClose { get; set; }
         private bool Editing { get; }
         private Customer Customer { get; set; }
+        private CustomerList List { get; }
 
-        public ManageCustomer(bool editing, Customer customer)
+        public ManageCustomer(CustomerList list, bool editing, Customer customer)
         {
             InitializeComponent();
 
             Editing = editing;
             CancelClose = true;
             Customer = customer;
+            List = list;
 
-            if(editing)
+            if (editing)
             {
-                Title = $"Editing Customer n°{customer.Id} ({customer.FirstName} {customer.Name})";
+                Title = $"Editing Customer: {customer.FirstName} {customer.Name}";
                 CreateButton.Content = "Save";
-                Customer_Id.Text = customer.Id.ToString();
                 Customer_FirstName.Text = customer.FirstName;
                 Customer_Name.Text = customer.Name;
                 Customer_DateOfBirth.SelectedDate = customer.DateOfBirth;
@@ -59,7 +61,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Check(Customer_FirstName) || Check(Customer_Name) || Check(Customer_Phone) || Check(Customer_Email)) return;
+            if (Check(Customer_FirstName) || Check(Customer_Name) || string.IsNullOrWhiteSpace(Customer_Phone.Text) || Check(Customer_Email)) return;
             DateTime dateOfBirth = Customer_DateOfBirth.DisplayDate;
             if (dateOfBirth == null)
             {
@@ -77,14 +79,30 @@ namespace CustomerManagerApp.Graphics.Windows
             Customer.DateOfBirth = Customer_DateOfBirth.DisplayDate;
 
             if (Editing)
+            {
                 DbManager.UpdateCustomer(Customer);
+            }
             else
-                DbManager.SaveCustomersToDB(new List<Customer>() { Customer });
+            {
 
+                List<Customer> cust = new List<Customer>() { Customer };
+
+                if (DataManager.Contains(Customer) || DbManager.SaveCustomersToDB(cust) == 0)
+                {
+                    MessageBox.Show("This customer is already registred in the database.", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                DataManager.Add(cust);
+                List.AddCustomer(Customer);
+
+            }
+
+            List.CustomersGrid.Items.Refresh();
             CancelClose = false;
             this.Close();
 
-            MessageBox.Show("Successfully saved Customer to DB", "Confirmation");
+            MessageBox.Show($"Successfully saved Customer to DB ", "Confirmation");
 
         }
 
@@ -105,6 +123,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (!CancelClose) List.WindowIsOpen = false;
             e.Cancel = CancelClose;
         }
     }

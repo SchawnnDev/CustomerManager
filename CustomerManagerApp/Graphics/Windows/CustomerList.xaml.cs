@@ -15,6 +15,7 @@ namespace CustomerManagerApp.Graphics.Windows
     {
 
         private CustomerListModel Model => DataContext as CustomerListModel;
+        public bool WindowIsOpen { get; set; }
 
         public CustomerList()
         {
@@ -22,20 +23,32 @@ namespace CustomerManagerApp.Graphics.Windows
             DataContext = new CustomerListModel();
             Dispatcher.Invoke(() => Model.Customers = new ObservableCollection<Customer>(DataManager.Customers));
             Model.Customers.Add(new Customer("Julian", "Dobrinkat", DateTime.Now, "+49 721 16179-103", "Dobrinkat@amc-ds.de"));
+            WindowIsOpen = false;
+        }
 
+        public void AddCustomer(Customer customer)
+        {
+            Model.Customers.Add(customer);
         }
 
         private void DisplayShippingAddresses_Click(object sender, RoutedEventArgs e)
         {
 
-            ManageCustomer manageCustomer = new ManageCustomer(false, null);
+            if (CheckWindowIsOpen()) return;
+            ManageCustomer manageCustomer = new ManageCustomer(this, false, null);
+            WindowIsOpen = true;
             manageCustomer.Show();
 
         }
 
         private void EditCustomer_Click(object sender, RoutedEventArgs e)
         {
-            ManageCustomer customer = new ManageCustomer(true, GetCustomerFromSender(sender));
+            var cust = GetCustomerFromSender(sender);
+
+            if (cust == null || CheckWindowIsOpen()) return;
+
+            ManageCustomer customer = new ManageCustomer(this, true, cust);
+            WindowIsOpen = true;
             customer.Show();
         }
 
@@ -43,7 +56,9 @@ namespace CustomerManagerApp.Graphics.Windows
         {
             var customer = GetCustomerFromSender(sender);
 
-            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Customer n°{customer.Id} ({ customer.FirstName } {customer.Name})", "Delete Customer", MessageBoxButton.YesNo);
+            if (customer == null) return;
+
+            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Customer { customer.FirstName } {customer.Name}", "Delete Customer", MessageBoxButton.YesNo);
 
             if (result != MessageBoxResult.Yes) return;
 
@@ -60,7 +75,21 @@ namespace CustomerManagerApp.Graphics.Windows
 
             var item = (DataGrid)contextMenu.PlacementTarget;
 
-            return (Customer)item.SelectedCells[0].Item;
+            if (item.SelectedCells.Count == 0) return null;
+
+            return item.SelectedCells.Count == 0 ? null : (Customer)item.SelectedCells[0].Item;
+        }
+
+        private bool CheckWindowIsOpen()
+        {
+
+            if(WindowIsOpen)
+            {
+                MessageBox.Show("A window is already open!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return true;
+            }
+
+            return false;
         }
 
     }

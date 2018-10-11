@@ -5,34 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:CustomerManagerApp.Graphics.Models"
         mc:Ignorable="d"
-        Title="Customer List" Height="450" Width="800"
-        d:DataContext="{models:CustomerListModel}"
+        Title="Customer List"
+        Height="450" Width="800"
         ResizeMode="CanMinimize">
+    <!-- d:DataContext="{models:CustomerListModel}"-->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition MaxHeight="450"/>
+        </Grid.RowDefinitions>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel VerticalAlignment="Stretch">
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Fichier">
+                    <MenuItem x:Name="settings" Header="_Paramètres" InputGestureText="Ctrl+S"/>
+                    <MenuItem x:Name="quitApp" Header="_Quitter"/>
+                </MenuItem>
+                <MenuItem Header="_Données">
 
-            <DataGrid ItemsSource="{Binding Customers}" IsReadOnly="True" x:Name="CustomersGrid" HorizontalAlignment="Left" Height="450" VerticalAlignment="Top" Width="800" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                    <DataGridTextColumn Header="Date Of Birth" Binding="{Binding DateOfBirth, StringFormat={}{0:dd/MM/yyyy}}"/>
-                    <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}"/>
-                    <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
-                </DataGrid.Columns>
+                    <MenuItem x:Name="import" Header="_Importer">
+                        <MenuItem x:Name="ImportCustomer" Header="_Customers"/>
+                        <MenuItem x:Name="ImportShippingAddress" Header="_Shipping Addresses"/>
+                    </MenuItem>
 
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Display Shipping Addresses" Click="DisplayShippingAddresses_Click" />
-                        <Separator/>
-                        <MenuItem Header="Edit" Click="EditCustomer_Click" />
-                        <MenuItem Header="Delete" Click="DeleteCustomer_Click" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
+                    <MenuItem x:Name="export" Header="_Exporter" InputGestureText="Ctrl+E"/>
 
-            </DataGrid>
 
-        </StackPanel>
-    </ScrollViewer>
+                    <MenuItem x:Name="reset" Header="_Remettre à zéro"/>
 
+                </MenuItem>
+                <MenuItem Header="_A propos" HorizontalAlignment="Center"/>
+            </Menu>
+
+        </DockPanel>
+        <DataGrid Grid.Row="1"  ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Customers}" IsReadOnly="True" x:Name="CustomersGrid" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Date of Birth" Binding="{Binding DateOfBirth, StringFormat={}{0:dd/MM/yyyy}}"/>
+                <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+            </DataGrid.Columns>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Display Shipping Addresses" Click="DisplayShippingAddresses_Click" />
+                    <Separator/>
+                    <MenuItem Header="Edit" Click="EditCustomer_Click" />
+                    <MenuItem Header="Delete" Click="DeleteCustomer_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+        </DataGrid>
+    </Grid>
 </Window>

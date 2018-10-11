@@ -23,6 +23,12 @@ namespace CustomerManager.Data
             Customers.AddRange(customers);
         }
 
+        public static void Remove(Customer customer)
+        {
+            if (!Contains(customer)) return;
+            Customers.Remove(customer);
+        }
+
         public static void AddWithoutDoubles(List<Customer> customers)
         {
             foreach (var customer in customers)

@@ -162,6 +162,7 @@ namespace CustomerManagement.Data
                         cmd.ExecuteNonQuery();
                     }
                     transaction.Commit();
+                    DataManager.Remove(customer);
                     Console.WriteLine("Success.");
                 }
 

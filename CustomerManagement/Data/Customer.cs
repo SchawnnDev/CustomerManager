@@ -31,7 +31,7 @@ namespace CustomerManagement.Data
         public override bool Equals(object obj)
         {
             var customer = obj as Customer;
-            return customer != null && (Id != 0) ? Id == customer.Id : (FirstName == customer.FirstName && Name == customer.Name);
+            return customer != null && ((Id != 0) ? Id == customer.Id : (FirstName == customer.FirstName && Name == customer.Name && Utils.Utils.DateEquals(DateOfBirth, customer.DateOfBirth)));
         }
 
         public string[] ToArray()
