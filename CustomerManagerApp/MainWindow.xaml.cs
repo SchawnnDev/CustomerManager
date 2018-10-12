@@ -14,18 +14,23 @@ namespace CustomerManagerApp
         public MainWindow()
         {
             InitializeComponent();
-            DbManager.DataSource = @"GRIEVOUS\HISTORIAN";
-            DbManager.Init();
-            DataManager.Init();
-            DbManager.LoadData();
+
+            Settings settings;
+            if (Properties.Settings.Default.SettingsKey.Contains("DataSource"))
+                settings = new Settings(Properties.Settings.Default["DataSource"].ToString(), true);
+
+            else
+                settings = new Settings(null, true);
+
+            settings.Show();
+
         }
 
 
         private void MenuSettings_Click(object sender, RoutedEventArgs e)
         {
 
-            Settings settings = new Settings();
-            settings.Activate();
+            Settings settings = new Settings(Properties.Settings.Default["DataSource"].ToString(), false);
             settings.Show();
 
         }

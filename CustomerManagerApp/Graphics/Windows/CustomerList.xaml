@@ -23,7 +23,7 @@
                 
                     <MenuItem x:Name="quitApp" Click="QuitApp_Click" Header="_Back"/>
 
-                    <MenuItem x:Name="create" Header="_New" Click="Create_Click"/>
+                    <MenuItem x:Name="create" Header="_New Customer" Click="Create_Click"/>
 
             </Menu>
 

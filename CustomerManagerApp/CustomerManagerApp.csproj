@@ -160,13 +160,25 @@
     <Compile Include="Graphics\Windows\DisplayShippingAddresses.xaml.cs">
       <DependentUpon>DisplayShippingAddresses.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Graphics\Windows\ManageShippingAddress.xaml.cs">
+      <DependentUpon>ManageShippingAddress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Graphics\Windows\QuestionBox.xaml.cs">
       <DependentUpon>QuestionBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Graphics\Windows\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Startup.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Startup.settings</DependentUpon>
+    </Compile>
     <Page Include="Graphics\Windows\DisplayShippingAddresses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Graphics\Windows\ManageShippingAddress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -227,6 +239,10 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Startup.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Startup.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

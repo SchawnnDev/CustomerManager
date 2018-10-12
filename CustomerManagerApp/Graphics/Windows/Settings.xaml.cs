@@ -1,4 +1,5 @@
 ﻿using CustomerManagement.Data;
+using CustomerManager.Data;
 using System.Linq;
 using System.Media;
 using System.Windows;
@@ -13,17 +14,19 @@ namespace CustomerManagerApp.Graphics.Windows
     {
 
         private bool CancelClose { get; set; }
+        private string Data { get; set; }
+        private bool Start { get; }
 
-        public Settings()
+        public Settings(string dataSource,bool start)
         {
             InitializeComponent();
             this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
             CancelClose = true;
-            dataSource.Text = DbManager.DataSource;
-        /*    if (DBManager.IntegratedSecurity)
-                securityYes.IsChecked = true;
-            else
-                securityNo.IsChecked = true; */
+            Data = dataSource;
+            Start = start;
+
+            if (dataSource != null)
+                DataSource.Text = dataSource.ToString();
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
@@ -34,26 +37,39 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            string txt = dataSource.Text;
+            string txt = DataSource.Text;
 
-            if (txt != null && !txt.All(ch => ch.Equals(' ')))
+            if (!string.IsNullOrWhiteSpace(txt))
             {
 
                 DbManager.DataSource = txt;
-                //  DBManager.IntegratedSecurity = securityYes.IsChecked == true ? true : false;
+                Properties.Settings.Default["DataSource"] = txt;
+                Properties.Settings.Default.Save();
+
+                if(Start)
+                {
+                    DbManager.Init();
+                    DataManager.Init();
+                    DbManager.LoadData();
+                }
+
                 CancelClose = false;
+                return;
             }
-            else
-            {
-                dataSource.BorderBrush = Brushes.Red;
-                SystemSounds.Beep.Play();
-            }
+
+            DataSource.BorderBrush = Brushes.Red;
+            SystemSounds.Beep.Play();
 
 
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (Data == null)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
             e.Cancel = CancelClose;
         }
 

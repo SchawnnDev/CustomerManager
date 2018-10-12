@@ -13,8 +13,8 @@ namespace CustomerManagement.Data
         public int CustomerId { get; set; }
         public string FirstName { get; private set; }
         public string Name { get; private set; }
-        public string Address { get; private set; }
-        public string PostalCode { get; private set; }
+        public string Address { get; set; }
+        public string PostalCode { get; set; }
 
         public ShippingAddress(int id, int customerId, string address, string postalCode)
         {

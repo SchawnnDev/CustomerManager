@@ -15,6 +15,7 @@ namespace CustomerManagerApp.Graphics.Windows
         private ShippingAddressListModel Model => DataContext as ShippingAddressListModel;
         public bool WindowIsOpen { get; set; }
         private CustomerList List { get; }
+        private Customer Customer { get; }
 
 
         public DisplayShippingAddresses(Customer customer, CustomerList list)
@@ -22,21 +23,43 @@ namespace CustomerManagerApp.Graphics.Windows
             InitializeComponent();
             DataContext = new ShippingAddressListModel();
             List = list;
+            Customer = customer;
             Dispatcher.Invoke(() => Model.ShippingAddresses = new ObservableCollection<ShippingAddress>(customer.ShippingAddresses));
             this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
         }
 
         private void EditAddress_Click(object sender, RoutedEventArgs e)
         {
+            var ship = GetShippingAddressFromSender(sender);
 
+            if (ship == null || CheckWindowIsOpen()) return;
+
+            ManageShippingAddress manageShippingAddress = new ManageShippingAddress(this, true, Customer, ship);
+            WindowIsOpen = true;
+            manageShippingAddress.Show();
         }
 
         private void DeleteAddress_Click(object sender, RoutedEventArgs e)
         {
+            var ship = GetShippingAddressFromSender(sender);
+
+            if (ship == null) return;
+
+            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Shipping Address { ship.Address }", "Delete Shipping Address", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+
+            if (result != MessageBoxResult.Yes) return;
+
+            DbManager.DeleteShippingAddress(ship.Id);
+            Model.ShippingAddresses.Remove(ship);
 
         }
 
-        private ShippingAddress GetCustomerFromSender(object sender)
+        public void AddShippingAddress(ShippingAddress address)
+        {
+            Model.ShippingAddresses.Add(address);
+        }
+
+        private ShippingAddress GetShippingAddressFromSender(object sender)
         {
             var menuItem = (MenuItem)sender;
 
@@ -55,12 +78,27 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-
+            if (CheckWindowIsOpen()) return;
+            ManageShippingAddress manageShippingAddress = new ManageShippingAddress(this, false, Customer, null);
+            WindowIsOpen = true;
+            manageShippingAddress.Show();
         }
 
         private void QuitApp_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
 
+        private bool CheckWindowIsOpen()
+        {
+
+            if (WindowIsOpen)
+            {
+                MessageBox.Show("A window is already open!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return true;
+            }
+
+            return false;
         }
     }
 }
