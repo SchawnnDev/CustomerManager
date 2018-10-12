@@ -46,13 +46,14 @@ namespace CustomerManagement.Data
 
         }
 
-        public static void Reset()
+        public static bool Reset()
         {
             DbLogWriteLine("Resetting database... ");
 
-            using (var connection = CreateSqlConnection("", DataSource))
+            using (var connection = CreateSqlConnection("", DataSource)) { 
                 LoadAndExecuteSQLScript("CustomerManagement.SQL.DropDatabase.sql", connection);
-
+                return true;
+            }
         }
 
         public static void UpdateCustomer(Customer customer)

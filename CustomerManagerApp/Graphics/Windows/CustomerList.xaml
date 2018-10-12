@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Customer List"
         Height="450" Width="800"
-        ResizeMode="CanMinimize">
-    <!-- d:DataContext="{models:CustomerListModel}"-->
+        ResizeMode="CanMinimize"
+        d:DataContext="{d:DesignInstance Type=models:CustomerListModel, IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -20,24 +20,11 @@
 
         <DockPanel Grid.Row="0">
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_Fichier">
-                    <MenuItem x:Name="settings" Header="_Paramètres" InputGestureText="Ctrl+S"/>
-                    <MenuItem x:Name="quitApp" Header="_Quitter"/>
-                </MenuItem>
-                <MenuItem Header="_Données">
+                
+                    <MenuItem x:Name="quitApp" Click="QuitApp_Click" Header="_Back"/>
 
-                    <MenuItem x:Name="import" Header="_Importer">
-                        <MenuItem x:Name="ImportCustomer" Header="_Customers"/>
-                        <MenuItem x:Name="ImportShippingAddress" Header="_Shipping Addresses"/>
-                    </MenuItem>
+                    <MenuItem x:Name="create" Header="_New" Click="Create_Click"/>
 
-                    <MenuItem x:Name="export" Header="_Exporter" InputGestureText="Ctrl+E"/>
-
-
-                    <MenuItem x:Name="reset" Header="_Remettre à zéro"/>
-
-                </MenuItem>
-                <MenuItem Header="_A propos" HorizontalAlignment="Center"/>
             </Menu>
 
         </DockPanel>
@@ -61,4 +48,5 @@
 
         </DataGrid>
     </Grid>
+
 </Window>

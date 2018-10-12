@@ -5,29 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:CustomerManagerApp.Graphics.Models"
         mc:Ignorable="d"
-        Title="Shipping Addresses" Height="450" Width="800"
-        d:DataContext="{models:ShippingAddressListModel}"
+        Title="Shipping Addresses" Height="350" Width="600"
+        d:DataContext="{d:DesignInstance Type=models:ShippingAddressListModel, IsDesignTimeCreatable=False}"
         ResizeMode="CanMinimize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition MaxHeight="450"/>
+        </Grid.RowDefinitions>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel VerticalAlignment="Stretch">
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
 
-            <DataGrid ItemsSource="{Binding ShippingAddresses}" IsReadOnly="True" x:Name="AddressGrid" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
-                    <DataGridTextColumn Header="Postal Code" Binding="{Binding PostalCode}"/>
-                </DataGrid.Columns>
+                <MenuItem x:Name="quitApp" Click="QuitApp_Click" Header="_Back"/>
 
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Edit" Click="EditAddress_Click" />
-                        <MenuItem Header="Delete" Click="DeleteAddress_Click" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
+                <MenuItem x:Name="create" Header="_New" Click="Create_Click"/>
 
-            </DataGrid>
+            </Menu>
 
-        </StackPanel>
-    </ScrollViewer>
+        </DockPanel>
+        <DataGrid Grid.Row="1"  ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding ShippingAddresses}" IsReadOnly="True" x:Name="AddressGrid" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="Postal Code" Binding="{Binding PostalCode}"/>
+            </DataGrid.Columns>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Edit" Click="EditAddress_Click" />
+                    <MenuItem Header="Delete" Click="DeleteAddress_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+        </DataGrid>
+    </Grid>
 
 </Window>

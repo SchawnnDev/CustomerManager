@@ -22,7 +22,6 @@ namespace CustomerManagerApp.Graphics.Windows
             InitializeComponent();
             DataContext = new CustomerListModel();
             Dispatcher.Invoke(() => Model.Customers = new ObservableCollection<Customer>(DataManager.Customers));
-            Model.Customers.Add(new Customer("Julian", "Dobrinkat", DateTime.Now, "+49 721 16179-103", "Dobrinkat@amc-ds.de"));
             WindowIsOpen = false;
         }
 
@@ -33,11 +32,13 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void DisplayShippingAddresses_Click(object sender, RoutedEventArgs e)
         {
+            var cust = GetCustomerFromSender(sender);
 
-            if (CheckWindowIsOpen()) return;
-            ManageCustomer manageCustomer = new ManageCustomer(this, false, null);
+            if (cust == null || CheckWindowIsOpen()) return;
+
+            DisplayShippingAddresses displayShippingAddresses = new DisplayShippingAddresses(cust, this);
             WindowIsOpen = true;
-            manageCustomer.Show();
+            displayShippingAddresses.Show();
 
         }
 
@@ -58,7 +59,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             if (customer == null) return;
 
-            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Customer { customer.FirstName } {customer.Name}", "Delete Customer", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Customer { customer.FirstName } {customer.Name}", "Delete Customer", MessageBoxButton.YesNo,MessageBoxImage.Exclamation);
 
             if (result != MessageBoxResult.Yes) return;
 
@@ -90,6 +91,18 @@ namespace CustomerManagerApp.Graphics.Windows
             }
 
             return false;
+        }
+        private void QuitApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Create_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckWindowIsOpen()) return;
+            ManageCustomer manageCustomer = new ManageCustomer(this, false, null);
+            WindowIsOpen = true;
+            manageCustomer.Show();
         }
 
     }

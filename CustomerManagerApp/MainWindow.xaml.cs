@@ -1,24 +1,8 @@
 ﻿using CustomerManagement.Data;
-using CustomerManager;
 using CustomerManager.Data;
-using CustomerManagerApp.Graphics;
-using CustomerManagerApp.Graphics.Models;
 using CustomerManagerApp.Graphics.Windows;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CustomerManagerApp
 {
@@ -34,7 +18,6 @@ namespace CustomerManagerApp
             DbManager.Init();
             DataManager.Init();
             DbManager.LoadData();
-            //Program.Test(new string[] { "t", "start" });
         }
 
 
@@ -65,7 +48,11 @@ namespace CustomerManagerApp
                 Filter = "CSV Files|*.csv",
                 Title = "Select a CSV File"
             };
-            openFileDialog.ShowDialog();
+
+            if (openFileDialog.ShowDialog() != true) return;
+
+            new QuestionBox(openFileDialog.FileName, false).Show();
+
         }
 
         private void ImportShippingAddress_Click(object sender, RoutedEventArgs e)
@@ -73,9 +60,31 @@ namespace CustomerManagerApp
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "CSV Files|*.csv",
-                Title = "Select a CSV File"
+                Title = "Select a CSV File",
+                CheckFileExists = true
             };
-            openFileDialog.ShowDialog();
+
+            if (openFileDialog.ShowDialog() != true) return;
+
+            new QuestionBox(openFileDialog.FileName, true).Show();
+
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show($"Do you really want to reset the Database ?", "Reset Database", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+
+            if (result != MessageBoxResult.Yes) return;
+
+            if (DbManager.Reset())
+            {
+                MessageBox.Show("Successfully resetted DataBase.", "Reset");
+                DataManager.Customers.Clear();
+                return;
+            }
+
+            MessageBox.Show("Error occurred during reset", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
         }
 
     }
