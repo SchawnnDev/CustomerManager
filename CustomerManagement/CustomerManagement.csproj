@@ -146,7 +146,7 @@
     <EmbeddedResource Include="SQL\InitializeDatabase.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SQL\DropDatabase.sql" />
+    <EmbeddedResource Include="SQL\DropDatabase.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

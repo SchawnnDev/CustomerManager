@@ -34,8 +34,7 @@ namespace CustomerManager
             Console.WriteLine("Loading app CustomerManager...");
 
             DbManager.Init();
-            DataManager.Init();
-            DbManager.LoadData();
+            Customers = DbManager.LoadData();
 
             Console.WriteLine("App is ready to use! :)");
 
@@ -76,7 +75,7 @@ namespace CustomerManager
                 {
                     case "display":
                         Start();
-                        DataManager.DisplayData();
+                        DisplayData.Display(Customers);
                         return true;
                     case "reset":
                         DbManager.Reset();
@@ -135,7 +134,7 @@ namespace CustomerManager
                         }
 
 
-                        switch(args[2])
+                        switch (args[2])
                         {
                             case "customer":
                                 DbManager.DeleteCustomer(id);
@@ -177,14 +176,14 @@ namespace CustomerManager
                         Start();
                         List<Customer> customers = FileManager.ImportCustomers(args[2], startLine);
                         Console.WriteLine($"Imported {customers.Count} customers from {args[2]}");
-                        DataManager.AddWithoutDoubles(customers);
+                        DataManager.AddWithoutDoubles(Customers, customers);
                         Console.WriteLine($"Saved {DbManager.SaveCustomersToDB(customers)} customers to db!");
                         return true;
                     case "address":
                         Start();
                         List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(args[2], startLine);
                         Console.WriteLine($"Imported {shippingAddresses.Count} shipping addresses from {args[2]}");
-                        List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(shippingAddresses, SearchType.Name);
+                        List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(Customers, shippingAddresses, SearchType.Name);
 
                         if (toBeSaved.Count != 0)
                         {

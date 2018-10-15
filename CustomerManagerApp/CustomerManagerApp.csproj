@@ -155,10 +155,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\CustomerData.cs" />
     <Compile Include="Graphics\Models\CustomerListModel.cs" />
     <Compile Include="Graphics\Models\ShippingAddressListModel.cs" />
     <Compile Include="Graphics\Windows\DisplayShippingAddresses.xaml.cs">
       <DependentUpon>DisplayShippingAddresses.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Graphics\Windows\ExportCustomers.xaml.cs">
+      <DependentUpon>ExportCustomers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Graphics\Windows\ExportShippingAddresses.xaml.cs">
+      <DependentUpon>ExportShippingAddresses.xaml</DependentUpon>
     </Compile>
     <Compile Include="Graphics\Windows\ManageShippingAddress.xaml.cs">
       <DependentUpon>ManageShippingAddress.xaml</DependentUpon>
@@ -166,15 +173,23 @@
     <Compile Include="Graphics\Windows\QuestionBox.xaml.cs">
       <DependentUpon>QuestionBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Graphics\Windows\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
+    <Compile Include="Graphics\Windows\ConnectionWindow.xaml.cs">
+      <DependentUpon>ConnectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Startup.Designer.cs">
+    <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Startup.settings</DependentUpon>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Page Include="Graphics\Windows\DisplayShippingAddresses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Graphics\Windows\ExportCustomers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Graphics\Windows\ExportShippingAddresses.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,11 +201,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Graphics\Windows\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Graphics\Windows\CustomerList.xaml">
+    <Page Include="Graphics\Windows\ConnectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -205,9 +216,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\Windows\CustomerList.xaml.cs">
-      <DependentUpon>CustomerList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Graphics\Windows\ManageCustomer.xaml.cs">
       <DependentUpon>ManageCustomer.xaml</DependentUpon>
@@ -240,9 +248,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Startup.settings">
+    <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Startup.Designer.cs</LastGenOutput>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

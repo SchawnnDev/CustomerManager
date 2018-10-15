@@ -3,16 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CustomerManagerApp"
+        xmlns:models="clr-namespace:CustomerManagerApp.Graphics.Models"
         mc:Ignorable="d"
-        Title="CustomerManager" Height="450" Width="800">
+        Title="CustomerManager" Height="450" Width="800" 
+        ResizeMode="CanMinimize"
+        d:DataContext="{d:DesignInstance Type=models:CustomerListModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterScreen">
+    
     <Grid>
-        <DockPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition MaxHeight="450"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem x:Name="settings" Header="_Settings" Click="MenuSettings_Click"/>
                     <MenuItem x:Name="quitApp" Header="_Exit" Click="QuitApp_Click" InputGestureText="Alt+F4" />
                 </MenuItem>
+
+                <MenuItem Header="_Manage">
+                    <MenuItem x:Name="create" Header="_New Customer" Click="Create_Click"/>
+                    <MenuItem x:Name="search" Header="_Search" Click="Search_Click"/>
+                </MenuItem>
+
                 <MenuItem Header="_Data">
 
                     <MenuItem x:Name="import" Header="_Import">
@@ -20,7 +38,11 @@
                         <MenuItem x:Name="ImportShippingAddress" Header="_Shipping Addresses" Click="ImportShippingAddress_Click"/>
                     </MenuItem>
 
-                    <MenuItem x:Name="export" Header="_Export"/>
+                    <MenuItem x:Name="export" Header="_Export">
+                        <MenuItem x:Name="ExportCustomer" Header="_Customers" Click="ExportCustomer_Click"/>
+                        <MenuItem x:Name="ExportShippingAddress" Header="_Shipping Addresses" Click="ExportShippingAddress_Click"/>
+                    </MenuItem>
+                    
                     <Separator/>
                     <MenuItem x:Name="reset" Click="Reset_Click" Header="_Reset database"/>
 
@@ -29,6 +51,26 @@
             </Menu>
 
         </DockPanel>
+
+        <DataGrid Grid.Row="1"  ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Customers}" IsReadOnly="True" x:Name="CustomersGrid" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Date of Birth" Binding="{Binding DateOfBirth, StringFormat={}{0:dd/MM/yyyy}}"/>
+                <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+            </DataGrid.Columns>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Display Shipping Addresses" Click="DisplayShippingAddresses_Click" />
+                    <Separator/>
+                    <MenuItem Header="Edit" Click="EditCustomer_Click" />
+                    <MenuItem Header="Delete" Click="DeleteCustomer_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+        </DataGrid>
 
     </Grid>
 </Window>

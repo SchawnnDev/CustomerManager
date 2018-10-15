@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Shipping Addresses" Height="350" Width="600"
         d:DataContext="{d:DesignInstance Type=models:ShippingAddressListModel, IsDesignTimeCreatable=False}"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

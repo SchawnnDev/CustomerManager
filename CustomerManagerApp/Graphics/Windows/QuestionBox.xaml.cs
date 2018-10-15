@@ -1,6 +1,7 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Utils;
 using CustomerManager.Data;
+using CustomerManagerApp.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,64 @@ namespace CustomerManagerApp.Graphics.Windows
             return !string.IsNullOrWhiteSpace(answer);
         }
 
+        private void Import(string answer, int startLine)
+        {
+            Dispatcher.Invoke(() =>
+            {
+
+                OkButton.IsEnabled = false;
+                CancelButton.IsEnabled = false;
+                Cursor = Cursors.Wait;
+
+            });
+
+            try
+            {
+
+                if (Addresses)
+                {
+
+
+                    List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(Path, startLine);
+                    Console.WriteLine($"Imported {shippingAddresses.Count} shipping addresses from { Path }");
+                    List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(CustomerData.Customers, shippingAddresses, SearchType.Name);
+
+                    if (toBeSaved.Count != 0)
+                        MessageBox.Show($"Successfully saved {DbManager.SaveShippingAddressesToDB(toBeSaved)} Shipping Addresses to database.");
+                    else
+                        MessageBox.Show("No customers were found for these addresses! Please import them before!", "No customers found", MessageBoxButton.OK, MessageBoxImage.Error);
+
+
+
+
+                }
+                else
+                {
+
+                    List<Customer> customers = FileManager.ImportCustomers(Path, startLine);
+
+                    Console.WriteLine($"Imported {customers.Count} customers from { Path}");
+
+                    CustomerData.AddWithoutDoubles(customers);
+
+                    MessageBox.Show($"Successfully saved {DbManager.SaveCustomersToDB(customers)} Customers to database.");
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error occurred: {e.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                Cursor = Cursors.Arrow;
+                Close();
+            });
+
+        }
+
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             string answer = Response.Text;
@@ -61,32 +120,9 @@ namespace CustomerManagerApp.Graphics.Windows
                 return;
             }
 
-            if (Addresses)
-            {
-                List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(Path, startLine);
-                Console.WriteLine($"Imported {shippingAddresses.Count} shipping addresses from { Path }");
-                List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(shippingAddresses, SearchType.Name);
+            Task.Run(() => Import(answer, startLine));
 
-                if (toBeSaved.Count != 0)
-                    MessageBox.Show($"Successfully saved {DbManager.SaveShippingAddressesToDB(toBeSaved)} Shipping Addresses to DB.");
-                else
-                    MessageBox.Show("No customers were found for these addresses! Please import them before!", "No customers found", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            }
-            else
-            {
-
-                List<Customer> customers = FileManager.ImportCustomers(Path, startLine);
-
-                Console.WriteLine($"Imported {customers.Count} customers from { Path}");
-
-                DataManager.AddWithoutDoubles(customers);
-
-                MessageBox.Show($"Successfully saved {DbManager.SaveCustomersToDB(customers)} Customers to DB.");
-
-            }
-
-            Close();
 
         }
 

@@ -1,15 +1,11 @@
-﻿using CustomerManagement.Data;
-using CustomerManager.Data;
+﻿using CustomerManager.Data;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomerManagement.Data
 {
@@ -52,6 +48,7 @@ namespace CustomerManagement.Data
 
             using (var connection = CreateSqlConnection("", DataSource)) { 
                 LoadAndExecuteSQLScript("CustomerManagement.SQL.DropDatabase.sql", connection);
+                Init();
                 return true;
             }
         }
@@ -101,14 +98,6 @@ namespace CustomerManagement.Data
         public static void DeleteShippingAddress(int id)
         {
 
-            ShippingAddress address = DataManager.FindShippingAddress(id);
-
-            if (address == null)
-            {
-                DbLogWriteLine("ShippingAddress does not exist.");
-                return;
-            }
-
             DbLogWrite($"Deleting ShippingAddress n°{ id}... ");
 
             using (var connection = CreateSqlConnection(DatabaseName, DataSource))
@@ -132,14 +121,6 @@ namespace CustomerManagement.Data
         public static void DeleteCustomer(int id)
         {
 
-            Customer customer = DataManager.Find(id);
-
-            if (customer == null)
-            {
-                DbLogWriteLine("User does not exist.");
-                return;
-            }
-
             DbLogWrite($"Deleting customer n°{ id}... ");
 
             using (var connection = CreateSqlConnection(DatabaseName, DataSource))
@@ -149,12 +130,6 @@ namespace CustomerManagement.Data
 
                 using (var transaction = connection.BeginTransaction())
                 {
-                    // Delete consumer
-                    using (var cmd = new SqlCommand("delete from Customers where id=@id", connection, transaction))
-                    {
-                        cmd.Parameters.AddWithValue("@id", id);
-                        cmd.ExecuteNonQuery();
-                    }
 
                     // Delete shippingaddresses
                     using (var cmd = new SqlCommand("delete from ShippingAddresses where customerid=@customerId", connection, transaction))
@@ -162,16 +137,27 @@ namespace CustomerManagement.Data
                         cmd.Parameters.AddWithValue("@customerId", id);
                         cmd.ExecuteNonQuery();
                     }
+
+                    // Delete consumer
+                    using (var cmd = new SqlCommand("delete from Customers where id=@id", connection, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    
+
                     transaction.Commit();
-                    DataManager.Remove(customer);
                     Console.WriteLine("Success.");
                 }
 
             }
         }
 
-        public static void LoadData()
+        public static List<Customer> LoadData()
         {
+
+            List<Customer> list = new List<Customer>();
 
             int addresses = 0, customers = 0;
 
@@ -194,19 +180,19 @@ namespace CustomerManagement.Data
                         var postalCode = reader["postalcode"];
                         Customer customer;
 
-                        if (!DataManager.Contains(id))
+                        if (!DataManager.Contains(list, id))
                         {
 
                             customer = new Customer(reader["firstname"].ToString(), reader["name"].ToString(), (DateTime)reader["dateofbirth"], reader["phonenumber"].ToString(), reader["email"].ToString())
                             {
                                 Id = (int)reader["id"]
                             };
-                            DataManager.Customers.Add(customer);
+                            list.Add(customer);
                             customers++;
                         }
                         else
                         {
-                            customer = DataManager.Find(id);
+                            customer = DataManager.Find(list,id);
                         }
 
                         if (customer != null && address != DBNull.Value && postalCode != DBNull.Value && DataManager.AddWithoutDoubles(customer, new ShippingAddress((int)reader["addressId"], id, address.ToString(), postalCode.ToString())) != null)
@@ -226,6 +212,8 @@ namespace CustomerManagement.Data
                 DbLogWriteLine($"{customers} addresses found.");
             else
                 DbLogWriteLine("No addresses found. :(");
+
+            return list;
 
         }
 

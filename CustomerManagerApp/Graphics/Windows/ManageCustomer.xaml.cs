@@ -1,6 +1,7 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Utils;
 using CustomerManager.Data;
+using CustomerManagerApp.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,16 +28,16 @@ namespace CustomerManagerApp.Graphics.Windows
         private bool CancelClose { get; set; }
         private bool Editing { get; }
         private Customer Customer { get; set; }
-        private CustomerList List { get; }
+        private MainWindow Main { get; }
 
-        public ManageCustomer(CustomerList list, bool editing, Customer customer)
+        public ManageCustomer(MainWindow main, bool editing, Customer customer)
         {
             InitializeComponent();
 
             Editing = editing;
             CancelClose = true;
             Customer = customer;
-            List = list;
+            Main = main;
 
             if (editing)
             {
@@ -87,22 +88,22 @@ namespace CustomerManagerApp.Graphics.Windows
 
                 List<Customer> cust = new List<Customer>() { Customer };
 
-                if (DataManager.Contains(Customer) || DbManager.SaveCustomersToDB(cust) == 0)
+                if (CustomerData.Contains(Customer) || DbManager.SaveCustomersToDB(cust) == 0)
                 {
                     MessageBox.Show("This customer is already registred in the database.", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                DataManager.Add(cust);
-                List.AddCustomer(Customer);
+                CustomerData.Add(cust);
+                Main.AddCustomer(Customer);
 
             }
 
-            List.CustomersGrid.Items.Refresh();
+            Main.CustomersGrid.Items.Refresh();
             CancelClose = false;
             this.Close();
 
-            MessageBox.Show($"Successfully saved Customer to DB ", "Confirmation");
+            MessageBox.Show($"Successfully saved Customer to database.", "Confirmation");
 
         }
 
@@ -123,7 +124,6 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!CancelClose) List.WindowIsOpen = false;
             e.Cancel = CancelClose;
         }
     }

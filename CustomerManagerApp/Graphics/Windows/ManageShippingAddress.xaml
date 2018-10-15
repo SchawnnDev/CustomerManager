@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomerManagerApp.Graphics.Windows"
        Title="Create a New Shipping Address" Height="180" Width="480"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen">
 
     <Grid >
         <Grid.ColumnDefinitions>

@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:CustomerManagerApp.Graphics.Windows"
         mc:Ignorable="d"
         Title="Create a New Customer" Height="290" Width="480"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 
-    <Grid >
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>

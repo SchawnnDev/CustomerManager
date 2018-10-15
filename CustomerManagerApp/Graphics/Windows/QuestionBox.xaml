@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CustomerManagerApp.Graphics.Windows"
         mc:Ignorable="d"
         Title="Import Customers" Height="120" Width="350"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize" 
+        WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition MaxHeight="60"/>
+            <RowDefinition MinHeight="35" MaxHeight="80"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="From which line do you want to import?" x:Name="QuestionText" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -25,8 +26,8 @@
 
 
         <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="OkButton" Click="OkButton_Click" Padding="5,0,5,0" Content="Ok"/>
-            <Button x:Name="CancelButton" Click="CancelButton_Click" Margin="10,0,0,0" Content="Cancel"/>
+            <Button x:Name="OkButton" Click="OkButton_Click" Padding="10,5,10,5" Content="Ok"/>
+            <Button x:Name="CancelButton" Click="CancelButton_Click" Padding="5,0,5,0" Margin="10,0,0,0" Content="Cancel"/>
         </StackPanel>
 
 

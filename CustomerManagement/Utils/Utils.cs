@@ -42,13 +42,13 @@ namespace CustomerManagement.Utils
 
         }
 
-        public static List<ShippingAddress> SearchCustomersForShippingAddresses(List<ShippingAddress> shippingAddresses, SearchType type)
+        public static List<ShippingAddress> SearchCustomersForShippingAddresses(List<Customer> customers,List<ShippingAddress> shippingAddresses, SearchType type)
         {
             List<ShippingAddress> addresses = new List<ShippingAddress>();
 
             foreach (ShippingAddress shippingAddress in shippingAddresses)
             {
-                ShippingAddress address = DataManager.AddWithoutDoubles(type == SearchType.Id ? DataManager.Find(shippingAddress.CustomerId) : DataManager.Find(shippingAddress.Name, shippingAddress.FirstName), shippingAddress);
+                ShippingAddress address = DataManager.AddWithoutDoubles(type == SearchType.Id ? DataManager.Find(customers, shippingAddress.CustomerId) : DataManager.Find(customers, shippingAddress.Name, shippingAddress.FirstName), shippingAddress);
                 if (address != null) addresses.Add(address);
             }
             return addresses;

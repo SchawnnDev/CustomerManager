@@ -1,5 +1,6 @@
 ﻿using CustomerManagement.Data;
 using CustomerManager.Data;
+using CustomerManagerApp.Data;
 using System.Linq;
 using System.Media;
 using System.Windows;
@@ -10,23 +11,28 @@ namespace CustomerManagerApp.Graphics.Windows
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Settings : Window
+    public partial class ConnectionWindow : Window
     {
 
         private bool CancelClose { get; set; }
         private string Data { get; set; }
         private bool Start { get; }
+        private MainWindow Main { get; }
 
-        public Settings(string dataSource,bool start)
+        public ConnectionWindow(MainWindow main, string dataSource,bool start)
         {
             InitializeComponent();
             this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
             CancelClose = true;
             Data = dataSource;
             Start = start;
+            Main = main;
 
-            if (dataSource != null)
-                DataSource.Text = dataSource.ToString();
+            if (!Start)
+                ConnectButton.Content = "Save";
+
+            if (!string.IsNullOrWhiteSpace(dataSource))
+                DataSource.Text = dataSource;
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
@@ -36,24 +42,23 @@ namespace CustomerManagerApp.Graphics.Windows
         }
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
-        {
+        {   
             string txt = DataSource.Text;
 
             if (!string.IsNullOrWhiteSpace(txt))
             {
 
                 DbManager.DataSource = txt;
-                Properties.Settings.Default["DataSource"] = txt;
-                Properties.Settings.Default.Save();
-
-                if(Start)
-                {
-                    DbManager.Init();
-                    DataManager.Init();
-                    DbManager.LoadData();
-                }
-
+                // Settings
+                Settings.Default.DataSource = txt;
+                Settings.Default.Save();
+                // Init app
+                DbManager.Init();
+                CustomerData.Initialize();
+                Main.LoadList();
+                //
                 CancelClose = false;
+                Close();
                 return;
             }
 

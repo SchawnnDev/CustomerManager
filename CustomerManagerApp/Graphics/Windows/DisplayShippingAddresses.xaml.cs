@@ -14,18 +14,17 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private ShippingAddressListModel Model => DataContext as ShippingAddressListModel;
         public bool WindowIsOpen { get; set; }
-        private CustomerList List { get; }
+        private MainWindow Main { get; }
         private Customer Customer { get; }
 
 
-        public DisplayShippingAddresses(Customer customer, CustomerList list)
+        public DisplayShippingAddresses(Customer customer, MainWindow main)
         {
             InitializeComponent();
             DataContext = new ShippingAddressListModel();
-            List = list;
+            Main = main;
             Customer = customer;
             Dispatcher.Invoke(() => Model.ShippingAddresses = new ObservableCollection<ShippingAddress>(customer.ShippingAddresses));
-            this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
         }
 
         private void EditAddress_Click(object sender, RoutedEventArgs e)
@@ -36,7 +35,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             ManageShippingAddress manageShippingAddress = new ManageShippingAddress(this, true, Customer, ship);
             WindowIsOpen = true;
-            manageShippingAddress.Show();
+            manageShippingAddress.ShowDialog();
         }
 
         private void DeleteAddress_Click(object sender, RoutedEventArgs e)
@@ -71,17 +70,12 @@ namespace CustomerManagerApp.Graphics.Windows
         }
 
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            List.WindowIsOpen = false;
-        }
-
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             if (CheckWindowIsOpen()) return;
             ManageShippingAddress manageShippingAddress = new ManageShippingAddress(this, false, Customer, null);
             WindowIsOpen = true;
-            manageShippingAddress.Show();
+            manageShippingAddress.ShowDialog();
         }
 
         private void QuitApp_Click(object sender, RoutedEventArgs e)
