@@ -1,4 +1,5 @@
 ﻿using CustomerManagement.Data;
+using CustomerManagement.Enums;
 using CustomerManager.Data;
 using System;
 using System.Collections.Generic;
@@ -79,11 +80,6 @@ namespace CustomerManagement.Utils
             return date.Year == other.Year && date.Month == other.Month && date.Day == other.Day;
         }
 
-    }
-
-    public enum SearchType
-    {
-        Id, Name, Variable
     }
 
 }

@@ -3,7 +3,9 @@ using CustomerManager.Data;
 using CustomerManagerApp.Data;
 using System.Linq;
 using System.Media;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CustomerManagerApp.Graphics.Windows
@@ -19,10 +21,10 @@ namespace CustomerManagerApp.Graphics.Windows
         private bool Start { get; }
         private MainWindow Main { get; }
 
-        public ConnectionWindow(MainWindow main, string dataSource,bool start)
+        public ConnectionWindow(MainWindow main, string dataSource, bool start)
         {
             InitializeComponent();
-            this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
+            this.Closing += Window_Closing;
             CancelClose = true;
             Data = dataSource;
             Start = start;
@@ -42,8 +44,8 @@ namespace CustomerManagerApp.Graphics.Windows
         }
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
-        {   
-            string txt = DataSource.Text;
+        {
+            var txt = DataSource.Text;
 
             if (!string.IsNullOrWhiteSpace(txt))
             {
@@ -53,18 +55,36 @@ namespace CustomerManagerApp.Graphics.Windows
                 Settings.Default.DataSource = txt;
                 Settings.Default.Save();
                 // Init app
-                DbManager.Init();
-                CustomerData.Initialize();
-                Main.LoadList();
-                //
-                CancelClose = false;
-                Close();
+                Task.Run(() => Initialize());
+
                 return;
             }
 
             DataSource.BorderBrush = Brushes.Red;
             SystemSounds.Beep.Play();
 
+        }
+
+        private void Initialize()
+        {
+
+            Dispatcher.Invoke(() =>
+            {
+                ConnectButton.IsEnabled = false;
+                CancelButton.IsEnabled = false;
+                Cursor = Cursors.Wait;
+            });
+
+            DbManager.Init();
+            CustomerData.Initialize();
+
+            Dispatcher.Invoke(() =>
+            {
+                Main.LoadList();
+                CancelClose = false;
+                Cursor = Cursors.Arrow;
+                Close();
+            });
 
         }
 

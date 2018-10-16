@@ -23,10 +23,8 @@ namespace CustomerManagerApp
 
             DataContext = new CustomerListModel();
 
-            var settings = new ConnectionWindow(this,Settings.Default.DataSource, true);
-            settings.ShowDialog();
+            new ConnectionWindow(this, Settings.Default.DataSource, true).ShowDialog();
 
-            
         }
 
         public void LoadList()
@@ -34,12 +32,10 @@ namespace CustomerManagerApp
             Model.Customers = new ObservableCollection<Customer>(CustomerData.Customers);
         }
 
-
         private void MenuSettings_Click(object sender, RoutedEventArgs e)
         {
 
-            var settings = new ConnectionWindow(this, Settings.Default.DataSource, false);
-            settings.ShowDialog();
+            new ConnectionWindow(this, Settings.Default.DataSource, false).ShowDialog();
 
         }
 
@@ -110,8 +106,7 @@ namespace CustomerManagerApp
 
             if (cust == null) return;
 
-            DisplayShippingAddresses displayShippingAddresses = new DisplayShippingAddresses(cust, this);
-            displayShippingAddresses.ShowDialog();
+            new DisplayShippingAddresses(cust, this).ShowDialog();
 
         }
 
@@ -121,8 +116,7 @@ namespace CustomerManagerApp
 
             if (cust == null) return;
 
-            ManageCustomer customer = new ManageCustomer(this, true, cust);
-            customer.ShowDialog();
+            new ManageCustomer(this, true, cust).ShowDialog();
         }
 
         private void DeleteCustomer_Click(object sender, RoutedEventArgs e)
@@ -131,7 +125,7 @@ namespace CustomerManagerApp
 
             if (customer == null) return;
 
-            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Customer { customer.FirstName } {customer.Name}", "Delete Customer", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            MessageBoxResult result = MessageBox.Show($"Do you really want to delete customer { customer.FirstName } {customer.Name}?", "Delete Customer", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 
             if (result != MessageBoxResult.Yes) return;
 
@@ -155,8 +149,7 @@ namespace CustomerManagerApp
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-            ManageCustomer manageCustomer = new ManageCustomer(this, false, null);
-            manageCustomer.ShowDialog();
+            new ManageCustomer(this, false, null).ShowDialog();
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
@@ -166,13 +159,12 @@ namespace CustomerManagerApp
 
         private void ExportShippingAddress_Click(object sender, RoutedEventArgs e)
         {
-
+            new ExportShippingAddresses().ShowDialog();
         }
 
         private void ExportCustomer_Click(object sender, RoutedEventArgs e)
         {
-            ExportWindow exportWindow = new ExportWindow();
-            exportWindow.ShowDialog();
+            new ExportCustomers().ShowDialog();
         }
 
     }

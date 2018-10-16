@@ -41,13 +41,13 @@ namespace CustomerManagerApp.Graphics.Windows
 
             if (editing)
             {
-                Title = $"Editing Shipping Address from {customer.FirstName} {customer.Name}";
+                Title = $"Editing shipping address from {customer.FirstName} {customer.Name}";
                 CreateButton.Content = "Save";
                 ShippingAddress_Address.Text = Address.Address;
                 ShippingAddress_PostalCode.Text = Address.PostalCode;
             } else
             {
-                Title = $"Create Shipping Address for {customer.FirstName} {customer.Name}";
+                Title = $"Create shipping address for {customer.FirstName} {customer.Name}";
             }
 
             this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
@@ -85,7 +85,7 @@ namespace CustomerManagerApp.Graphics.Windows
             CancelClose = false;
             this.Close();
 
-            MessageBox.Show($"Successfully saved Shipping Address to DB ", "Confirmation");
+            MessageBox.Show($"Successfully saved shipping address to DB ", "Confirmation");
 
         }
 
@@ -105,7 +105,6 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!CancelClose) DisplayShippingAddresses.WindowIsOpen = false;
             e.Cancel = CancelClose;
         }
     }

@@ -98,7 +98,7 @@ namespace CustomerManagement.Data
         public static void DeleteShippingAddress(int id)
         {
 
-            DbLogWrite($"Deleting ShippingAddress n°{ id}... ");
+            DbLogWrite($"Deleting shipping address n°{ id}... ");
 
             using (var connection = CreateSqlConnection(DatabaseName, DataSource))
             {
@@ -204,12 +204,12 @@ namespace CustomerManagement.Data
             }
 
             if (customers != 0)
-                DbLogWriteLine($"{customers} customers found.");
+                DbLogWriteLine($"{customers} customer(s) found.");
             else
                 DbLogWriteLine("No customers found. :(");
 
             if (addresses != 0)
-                DbLogWriteLine($"{customers} addresses found.");
+                DbLogWriteLine($"{customers} addresse(s) found.");
             else
                 DbLogWriteLine("No addresses found. :(");
 

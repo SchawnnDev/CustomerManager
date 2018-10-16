@@ -1,8 +1,11 @@
 ﻿using CustomerManagement.Data;
+using CustomerManagement.Enums;
+using CustomerManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CustomerManager.Data
@@ -59,10 +62,73 @@ namespace CustomerManager.Data
             return shippingAddresses;
         }
 
+        public static int ExportCustomers(string path, List<Customer> customers, ExportSettings[] settings)
+        {
+            var count = 0;
+
+
+            using (var file = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                file.SetLength(0);
+
+                using (var stream = new StreamWriter(file))
+                {
+
+                    // Write first info line
+                    stream.WriteLine(StringUtils.BuildExportIntroductionLine(settings));
+
+                    foreach (var customer in customers)
+                    {
+                        stream.WriteLine(StringUtils.BuildExportLine(customer, null, settings));
+                        count++;
+                    }
+
+                }
+
+            }
+
+            return count;
+
+        }
+
+        public static int ExportShippingAddresses(string path, List<Customer> customers, ExportSettings[] settings)
+        {
+            var count = 0;
+
+            using (var file = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                file.SetLength(0);
+
+                using (var stream = new StreamWriter(file))
+                {
+
+                    // Write first info line
+                    stream.WriteLine(StringUtils.BuildExportIntroductionLine(settings));
+
+                    foreach (var customer in customers)
+                    {
+
+                        foreach (var address in customer.ShippingAddresses)
+                        {
+                            stream.WriteLine(StringUtils.BuildExportLine(customer, address, settings));
+                            count++;
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return count;
+
+        }
+
         private static string[] ReadFile(string path)
         {
             return File.ReadAllLines(path);
         }
 
     }
+
 }

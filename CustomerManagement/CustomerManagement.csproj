@@ -136,10 +136,13 @@
     <Compile Include="Data\Customer.cs" />
     <Compile Include="Data\DataManager.cs" />
     <Compile Include="Data\ShippingAddresses.cs" />
+    <Compile Include="Enums\ExportSettings.cs" />
+    <Compile Include="Enums\SearchType.cs" />
     <Compile Include="IO\DbManager.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ArrayPrinter.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +154,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.SqlServer.SqlManagementObjects.140.17283.0\build\net40\Microsoft.SqlServer.SqlManagementObjects.targets" Condition="Exists('..\packages\Microsoft.SqlServer.SqlManagementObjects.140.17283.0\build\net40\Microsoft.SqlServer.SqlManagementObjects.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

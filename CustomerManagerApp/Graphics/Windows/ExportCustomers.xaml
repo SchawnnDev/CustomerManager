@@ -1,11 +1,11 @@
-﻿<Window x:Class="CustomerManagerApp.Graphics.Windows.ExportWindow"
+﻿<Window x:Class="CustomerManagerApp.Graphics.Windows.ExportCustomers"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomerManagerApp.Graphics.Windows"
         mc:Ignorable="d"
-        Title="Export Customers" Height="302.654" Width="480"
+        Title="Export Customers" Height="314.891" Width="480"
         ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -40,7 +40,7 @@
 
         <Label Content="Select path" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
         <Button x:Name="BrowseButton" Click="BrowseButton_Click" Content="Browse" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,5,5,5"  Margin="0,0,20,0"/>
-        <TextBox x:Name="FilePath" IsEnabled="False" Grid.Column="1" Grid.Row="1" TextWrapping="NoWrap" Padding="0,5,0,5" Margin="0,15,80,15"/>
+        <TextBox x:Name="FilePath" IsReadOnly="True" Grid.Column="1" Grid.Row="1" TextWrapping="NoWrap"  ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" Padding="0,5,0,5" Margin="0,15,80,15"/>
 
         <Label Content="ID" Grid.Column="0" Grid.Row="2"/>
         <CheckBox x:Name="Check_ID" Grid.Column="1" Grid.Row="2" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>

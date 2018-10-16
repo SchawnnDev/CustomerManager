@@ -45,11 +45,9 @@ namespace CustomerManager
             }
 
 
-            if (data.Count != 1)
-                Console.WriteLine(ArrayPrinter.GetDataInTableFormat(data));
-            else
-                Console.WriteLine("No customers & addresses in database.");
-
+            Console.WriteLine(data.Count != 1
+                ? ArrayPrinter.GetDataInTableFormat(data)
+                : "No customers & addresses in database.");
         }
 
         private static string[] AddToArray(string[] array, bool before, params string[] add)

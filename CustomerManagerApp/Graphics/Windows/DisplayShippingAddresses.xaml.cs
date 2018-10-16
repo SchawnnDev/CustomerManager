@@ -13,7 +13,6 @@ namespace CustomerManagerApp.Graphics.Windows
     {
 
         private ShippingAddressListModel Model => DataContext as ShippingAddressListModel;
-        public bool WindowIsOpen { get; set; }
         private MainWindow Main { get; }
         private Customer Customer { get; }
 
@@ -31,10 +30,9 @@ namespace CustomerManagerApp.Graphics.Windows
         {
             var ship = GetShippingAddressFromSender(sender);
 
-            if (ship == null || CheckWindowIsOpen()) return;
+            if (ship == null) return;
 
             ManageShippingAddress manageShippingAddress = new ManageShippingAddress(this, true, Customer, ship);
-            WindowIsOpen = true;
             manageShippingAddress.ShowDialog();
         }
 
@@ -44,7 +42,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             if (ship == null) return;
 
-            MessageBoxResult result = MessageBox.Show($"Do you really want to delete Shipping Address { ship.Address }", "Delete Shipping Address", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            MessageBoxResult result = MessageBox.Show($"Do you really want to delete shipping address { ship.Address }", "Delete shipping address", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 
             if (result != MessageBoxResult.Yes) return;
 
@@ -72,10 +70,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-            if (CheckWindowIsOpen()) return;
-            ManageShippingAddress manageShippingAddress = new ManageShippingAddress(this, false, Customer, null);
-            WindowIsOpen = true;
-            manageShippingAddress.ShowDialog();
+            new ManageShippingAddress(this, false, Customer, null).ShowDialog();
         }
 
         private void QuitApp_Click(object sender, RoutedEventArgs e)
@@ -83,16 +78,5 @@ namespace CustomerManagerApp.Graphics.Windows
             Close();
         }
 
-        private bool CheckWindowIsOpen()
-        {
-
-            if (WindowIsOpen)
-            {
-                MessageBox.Show("A window is already open!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                return true;
-            }
-
-            return false;
-        }
     }
 }

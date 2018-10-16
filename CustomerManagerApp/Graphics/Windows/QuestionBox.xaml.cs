@@ -1,4 +1,5 @@
 ﻿using CustomerManagement.Data;
+using CustomerManagement.Enums;
 using CustomerManagement.Utils;
 using CustomerManager.Data;
 using CustomerManagerApp.Data;
@@ -67,18 +68,14 @@ namespace CustomerManagerApp.Graphics.Windows
                 if (Addresses)
                 {
 
-
                     List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(Path, startLine);
-                    Console.WriteLine($"Imported {shippingAddresses.Count} shipping addresses from { Path }");
+                    Console.WriteLine($@"Imported {shippingAddresses.Count} shipping addresses from { Path }");
                     List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(CustomerData.Customers, shippingAddresses, SearchType.Name);
 
                     if (toBeSaved.Count != 0)
-                        MessageBox.Show($"Successfully saved {DbManager.SaveShippingAddressesToDB(toBeSaved)} Shipping Addresses to database.");
+                        MessageBox.Show($"Successfully saved {DbManager.SaveShippingAddressesToDB(toBeSaved)} shipping address(es) to database.");
                     else
                         MessageBox.Show("No customers were found for these addresses! Please import them before!", "No customers found", MessageBoxButton.OK, MessageBoxImage.Error);
-
-
-
 
                 }
                 else
@@ -86,11 +83,11 @@ namespace CustomerManagerApp.Graphics.Windows
 
                     List<Customer> customers = FileManager.ImportCustomers(Path, startLine);
 
-                    Console.WriteLine($"Imported {customers.Count} customers from { Path}");
+                    Console.WriteLine($@"Imported {customers.Count} customer(s) from { Path}");
 
                     CustomerData.AddWithoutDoubles(customers);
 
-                    MessageBox.Show($"Successfully saved {DbManager.SaveCustomersToDB(customers)} Customers to database.");
+                    MessageBox.Show($"Successfully saved {DbManager.SaveCustomersToDB(customers)} customer(s) to database.");
 
                 }
 
@@ -121,8 +118,6 @@ namespace CustomerManagerApp.Graphics.Windows
             }
 
             Task.Run(() => Import(answer, startLine));
-
-
 
         }
 
