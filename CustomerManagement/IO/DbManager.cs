@@ -29,9 +29,6 @@ namespace CustomerManagement.Data
 
                     LoadAndExecuteSQLScript("CustomerManagement.SQL.InitializeDatabase.sql", connection);
 
-                    connection.ChangeDatabase("CustomerManager");
-
-
                 }
             }
             catch (Exception e)
@@ -235,9 +232,9 @@ namespace CustomerManagement.Data
                 IntegratedSecurity = true
             };
 
-            if (initialCatalog.Length != 0)
+            if (!string.IsNullOrEmpty(initialCatalog))
                 builder.InitialCatalog = initialCatalog;
-            if (dataSource.Length != 0)
+            if (!string.IsNullOrEmpty(dataSource))
                 builder.DataSource = dataSource;
 
             return new SqlConnection(builder.ConnectionString);

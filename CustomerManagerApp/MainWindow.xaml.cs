@@ -152,11 +152,6 @@ namespace CustomerManagerApp
             new ManageCustomer(this, false, null).ShowDialog();
         }
 
-        private void Search_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ExportShippingAddress_Click(object sender, RoutedEventArgs e)
         {
             new ExportShippingAddresses().ShowDialog();

@@ -1,0 +1,64 @@
+﻿@using System.Collections
+@using CustomerManagement.Data
+@model List<Customer>
+
+@{
+    ViewBag.Title = "Customers";
+}
+
+@section styles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.css"></link>
+}
+
+@section scripts {
+    <script src="~/Scripts/customers.js"></script>
+}
+
+
+<div class="container">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">Hello</div>
+
+        <div class="panel-body">
+
+            <table class="table table-bordered" id="customers">
+
+                <thead>
+                    <tr>
+                        <td>First Name</td>
+                        <td>Name</td>
+                        <td>Date of Birth</td>
+                        <td>Phone Number</td>
+                        <td>Email</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!-- loop -->
+
+                    @foreach (var customer in Model)
+                    {
+                        <tr class="context-menu-one">
+                            <td>@customer.FirstName</td>
+                            <td>@customer.Name</td>
+                            <td>@customer.DateOfBirth</td>
+                            <td>@customer.PhoneNumber</td>
+                            <td>@customer.Email</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="panel-footer">
+        </div>
+
+    </div>
+
+
+</div>

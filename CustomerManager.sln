@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement", "Custo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagerApp", "CustomerManagerApp\CustomerManagerApp.csproj", "{21486725-F140-4524-8699-DAE7A80B2C26}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CustomerManagerWeb", "CustomerManagerWeb\CustomerManagerWeb.vbproj", "{254AE808-732B-4170-A295-49AA84FA62A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagerWeb", "CustomerManagerWeb\CustomerManagerWeb.csproj", "{E5A8697A-2257-4D62-9A96-59642E780010}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{21486725-F140-4524-8699-DAE7A80B2C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21486725-F140-4524-8699-DAE7A80B2C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21486725-F140-4524-8699-DAE7A80B2C26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{254AE808-732B-4170-A295-49AA84FA62A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{254AE808-732B-4170-A295-49AA84FA62A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{254AE808-732B-4170-A295-49AA84FA62A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{254AE808-732B-4170-A295-49AA84FA62A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5A8697A-2257-4D62-9A96-59642E780010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5A8697A-2257-4D62-9A96-59642E780010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5A8697A-2257-4D62-9A96-59642E780010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5A8697A-2257-4D62-9A96-59642E780010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
