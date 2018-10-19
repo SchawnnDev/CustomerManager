@@ -43,7 +43,8 @@ namespace CustomerManagement.Data
         {
             DbLogWriteLine("Resetting database... ");
 
-            using (var connection = CreateSqlConnection("", DataSource)) { 
+            using (var connection = CreateSqlConnection("", DataSource))
+            {
                 LoadAndExecuteSQLScript("CustomerManagement.SQL.DropDatabase.sql", connection);
                 Init();
                 return true;
@@ -84,7 +85,7 @@ namespace CustomerManagement.Data
                     cmd.Parameters.AddWithValue("@id", address.Id);
                     cmd.Parameters.AddWithValue("@customerid", address.CustomerId);
                     cmd.Parameters.AddWithValue("@address", address.Address);
-                    cmd.Parameters.AddWithValue("@postalcode",address.PostalCode);
+                    cmd.Parameters.AddWithValue("@postalcode", address.PostalCode);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -142,13 +143,78 @@ namespace CustomerManagement.Data
                         cmd.ExecuteNonQuery();
                     }
 
-                    
+
 
                     transaction.Commit();
                     Console.WriteLine("Success.");
                 }
 
             }
+        }
+
+        public static Customer GetCustomer(int id)
+        {
+
+            Customer customer = new Customer();
+
+            using (var connection = CreateSqlConnection(DatabaseName, DataSource))
+            {
+
+                connection.Open();
+
+                var cmd = new SqlCommand("select firstname, name, dateofbirth, phonenumber, email from Customers where id=@id", connection);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+
+                    if(!reader.Read()) return new Customer();
+
+                    customer.Id = id;
+                    customer.FirstName = reader["firstname"].ToString();
+                    customer.Name = reader["name"].ToString();
+                    customer.DateOfBirth = (DateTime) reader["dateofbirth"];
+                    customer.PhoneNumber = reader["phonenumber"].ToString();
+                    customer.Email = reader["email"].ToString();
+
+                }
+
+            }
+
+            return customer;
+        }
+
+
+        public static List<ShippingAddress> GetShippingAddresses(int customerId)
+        {
+
+            List<ShippingAddress> list = new List<ShippingAddress>();
+
+            using (var connection = CreateSqlConnection(DatabaseName, DataSource))
+            {
+
+                connection.Open();
+
+                var cmd = new SqlCommand("select id, address, postalcode from ShippingAddresses where customerId=@customerId", connection);
+                cmd.Parameters.AddWithValue("@customerId", customerId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+
+                        int id = (int)reader["id"];
+                        var address = reader["address"].ToString();
+                        var postalCode = reader["postalcode"].ToString();
+                        list.Add(new ShippingAddress(id, customerId, address, postalCode));
+
+                    }
+                }
+
+            }
+
+            return list;
         }
 
         public static List<Customer> LoadData()
@@ -189,7 +255,7 @@ namespace CustomerManagement.Data
                         }
                         else
                         {
-                            customer = DataManager.Find(list,id);
+                            customer = DataManager.Find(list, id);
                         }
 
                         if (customer != null && address != DBNull.Value && postalCode != DBNull.Value && DataManager.AddWithoutDoubles(customer, new ShippingAddress((int)reader["addressId"], id, address.ToString(), postalCode.ToString())) != null)
@@ -211,16 +277,6 @@ namespace CustomerManagement.Data
                 DbLogWriteLine("No addresses found. :(");
 
             return list;
-
-        }
-
-        public static bool TableExists(string name, SqlConnection connection)
-        {
-            using (var cmd = new SqlCommand("select case when exists(select * from information_schema.tables where table_name=@tableName) then 1 else 0 end", connection))
-            {
-                cmd.Parameters.AddWithValue("@tableName", name);
-                return (int)cmd.ExecuteScalar() == 1;
-            }
 
         }
 
@@ -340,9 +396,4 @@ namespace CustomerManagement.Data
 
     }
 
-    public enum DeleteType
-    {
-        Table,
-        Database
-    }
 }

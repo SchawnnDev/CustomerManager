@@ -14,10 +14,17 @@ namespace CustomerManagerWeb
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { area = "Customers", controller = "Customers", action = "Index", id = UrlParameter.Optional }
+                "Default",
+                "{controller}/{action}/{id}",
+                new { area = "Customers", controller = "Customers", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                "ShippingAddresses",
+                "{controller}/{action}/{id}/{addressId}",
+                new { controller = "ShippingAddresses", action = "Index", addressId = UrlParameter.Optional }
+            );
+
         }
     }
 }

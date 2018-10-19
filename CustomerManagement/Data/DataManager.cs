@@ -13,7 +13,7 @@ namespace CustomerManager.Data
 
         public static bool Contains(List<Customer> customers, int id) => Find(customers, id) != null;
 
-        public static Customer Find(List<Customer> customers,int id)
+        public static Customer Find(List<Customer> customers, int id)
         {
             foreach (var customer in customers)
                 if (customer.Id != 0 && customer.Id == id) return customer;
@@ -29,7 +29,7 @@ namespace CustomerManager.Data
 
         public static void Remove(List<Customer> customers, Customer customer)
         {
-            if (!Contains(customers,customer)) return;
+            if (!Contains(customers, customer)) return;
             customers.Remove(customer);
         }
 
@@ -101,6 +101,14 @@ namespace CustomerManager.Data
 
             return shippingAddresses;
 
+        }
+
+        public static ShippingAddress GetShippingAddress(List<ShippingAddress> addresses, int id)
+        {
+            foreach (var a in addresses)
+                if (a.Id == id)
+                    return a;
+            return null;
         }
 
     }

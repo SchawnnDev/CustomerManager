@@ -16,6 +16,11 @@ namespace CustomerManagement.Data
         public string Address { get; set; }
         public string PostalCode { get; set; }
 
+        public ShippingAddress(int customerId)
+        {
+            CustomerId = customerId;
+        }
+
         public ShippingAddress(int id, int customerId, string address, string postalCode)
         {
             Id = id;

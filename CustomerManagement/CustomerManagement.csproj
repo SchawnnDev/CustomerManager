@@ -136,6 +136,7 @@
     <Compile Include="Data\Customer.cs" />
     <Compile Include="Data\DataManager.cs" />
     <Compile Include="Data\ShippingAddresses.cs" />
+    <Compile Include="Enums\DeleteType.cs" />
     <Compile Include="Enums\ExportSettings.cs" />
     <Compile Include="Enums\SearchType.cs" />
     <Compile Include="IO\DbManager.cs" />

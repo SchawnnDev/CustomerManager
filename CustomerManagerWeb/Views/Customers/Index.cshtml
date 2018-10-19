@@ -8,11 +8,13 @@
 
 @section styles
 {
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.css"></link>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.css" />
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" type="text/css" />
 }
 
 @section scripts {
-    <script src="~/Scripts/customers.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript" src="~/Scripts/customers.js"></script>
 }
 
 
@@ -20,35 +22,37 @@
 
     <div class="panel panel-default">
 
-        <div class="panel-heading">Hello</div>
+        <div class="panel-heading"></div>
 
         <div class="panel-body">
+            
+            @Html.AntiForgeryToken()
 
             <table class="table table-bordered" id="customers">
 
                 <thead>
-                    <tr>
-                        <td>First Name</td>
-                        <td>Name</td>
-                        <td>Date of Birth</td>
-                        <td>Phone Number</td>
-                        <td>Email</td>
-                    </tr>
+                <tr>
+                    <td>First Name</td>
+                    <td>Name</td>
+                    <td>Date of Birth</td>
+                    <td>Phone Number</td>
+                    <td>Email</td>
+                </tr>
                 </thead>
                 <tbody>
 
-                    <!-- loop -->
+                <!-- loop -->
 
-                    @foreach (var customer in Model)
-                    {
-                        <tr class="context-menu-one">
-                            <td>@customer.FirstName</td>
-                            <td>@customer.Name</td>
-                            <td>@customer.DateOfBirth</td>
-                            <td>@customer.PhoneNumber</td>
-                            <td>@customer.Email</td>
-                        </tr>
-                    }
+                @foreach (var customer in Model)
+                {
+                    <tr class="context-menu-one" data-customer-id="@customer.Id">
+                        <td>@customer.FirstName</td>
+                        <td>@customer.Name</td>
+                        <td>@Html.FormatValue(customer.DateOfBirth, "{0:dd/MM/yyyy}")</td>
+                        <td>@customer.PhoneNumber</td>
+                        <td>@customer.Email</td>
+                    </tr>
+                }
 
                 </tbody>
 
@@ -62,3 +66,6 @@
 
 
 </div>
+
+<div id="shippingAddresses"></div>
+

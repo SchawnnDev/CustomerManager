@@ -1,0 +1,40 @@
+﻿@using CustomerManagement.Data
+@model Customer
+
+@{
+    Layout = "";
+}
+
+<form method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" value="@(string.IsNullOrEmpty(Model.FirstName) ? "" : Model.FirstName)" placeholder="Paul">
+    </div>
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" value="@(string.IsNullOrEmpty(Model.Name) ? "" : Model.Name)" placeholder="Meyer">
+    </div>
+    
+    <div class="form-group">
+        <label for="dateOfBirth">Date of Birth</label>
+        <input type="text" class="form-control" id="dateOfBirth" value="@(Model.DateOfBirth.Year!=1? Model.DateOfBirth.ToString("dd/MM/yyyy") : "")" placeholder="01/01/2000">
+    </div>
+    
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control" id="phoneNumber" value="@(string.IsNullOrEmpty(Model.PhoneNumber) ? "" : Model.PhoneNumber)" placeholder="+33788490372">
+    </div>
+    
+    <div class="form-group">
+        <label for="email">First Name</label>
+        <input type="text" class="form-control" id="email" value="@(string.IsNullOrEmpty(Model.Email) ? "" : Model.Email)" placeholder="paul.meyer@schawnndev.fr">
+    </div>
+    
+
+    <button type="submit" class="btn btn-success">@(Model.Id != 0 ? "Save" : "Create")</button>
+
+</form>
+
