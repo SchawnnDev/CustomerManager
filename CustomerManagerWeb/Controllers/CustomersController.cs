@@ -1,4 +1,6 @@
-﻿using CustomerManagement.Data;
+﻿using System;
+using System.Collections.Generic;
+using CustomerManagement.Data;
 using System.Web.Mvc;
 
 namespace CustomerManagerWeb.Controllers
@@ -36,6 +38,33 @@ namespace CustomerManagerWeb.Controllers
             if (customer == null) customer = new Customer();
 
             return View(customer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Manage(FormCollection collection)
+        {
+            var id = int.Parse(collection["id"]);
+            var firstName = collection["firstName"];
+            var name = collection["name"];
+            var dateOfBirthStr = collection["dateOfBirth"];
+            var phoneNumber = collection["phoneNumber"];
+            var email = collection["email"];
+
+            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(name) || !DateTime.TryParse(dateOfBirthStr, out var dateOfBirth) || string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(email)) return View("Error");
+
+            var customer = new Customer(firstName, name, dateOfBirth, phoneNumber, email)
+            {
+                Id = id
+            };
+
+            if (id == 0)
+                DbManager.SaveCustomersToDB(new List<Customer>() { customer });
+            else
+                DbManager.UpdateCustomer(customer);
+
+            return RedirectToAction("Index", "Customers");
+
         }
 
     }

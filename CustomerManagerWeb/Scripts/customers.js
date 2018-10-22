@@ -88,11 +88,12 @@
                         var params = {
                             Id: addressId
                         };
-                        
+
                         $.postJSON(window.location.href + "ShippingAddresses/Delete/" + id, params, function success(data) {
-                           options.$trigger[0].remove();
+                            //options.$trigger[0].remove();
                             //$("#shippingAddresses").parentElement.location.reload();
-                        },antiForgeryToken);
+                            var numItems = $('.context-menu-two').length;
+                        }, antiForgeryToken);
 
 
                     }
@@ -163,14 +164,6 @@ function showEditCustomerPopup(id, addressId) {
             }
         }
     });
-}
-
-function createNewCustomer() {
-
-}
-
-function createNewShippingAddress(customerId) {
-
 }
 
 jQuery.postJSON = function (url, data, success, antiForgeryToken, dataType) {

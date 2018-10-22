@@ -114,7 +114,15 @@ namespace CustomerManagement.Data
             }
         }
 
+        public static bool CustomerExists(int id)
+        {
+            return GetCustomer(id).Id == id;
+        }
 
+        public static bool ShippingAddressExists(int id)
+        {
+            return DataManager.GetShippingAddress(GetShippingAddresses(id),id) != null;
+        }
 
         public static void DeleteCustomer(int id)
         {
