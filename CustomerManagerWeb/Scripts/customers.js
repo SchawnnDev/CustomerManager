@@ -48,10 +48,8 @@
         },
 
         items: {
+            "new": { name: "Create new", icon: "add" },
             "display": { name: "Display shipping addresses", icon: "paste" },
-            "sep2": "---------",
-            "new": { name: "Create new", icon: "new" },
-            "sep3": "---------",
             "edit": { name: "Edit", icon: "edit" },
             "delete": { name: "Delete", icon: "delete" },
         }
@@ -104,8 +102,7 @@
         },
 
         items: {
-            "new": { name: "Create new", icon: "new" },
-            "sep2": "---------",
+            "new": { name: "Create new", icon: "add" },
             "edit": { name: "Edit", icon: "edit" },
             "delete": { name: "Delete", icon: "delete" },
         }
@@ -142,7 +139,11 @@ function showEditAddressPopup(id, addressId) {
         modal: true,
 
         buttons: {
-            "Close": function () {
+            Save: function () {
+                if (formCheck($(this).dialog()))
+                    $(this).find("#addressForm").submit();
+            },
+            Close: function () {
                 $(this).dialog("close");
             }
         }
@@ -159,11 +160,29 @@ function showEditCustomerPopup(id, addressId) {
         modal: true,
 
         buttons: {
-            "Close": function () {
+            Save: function () {
+                if (formCheck($(this).dialog()))
+                    $(this).find("#customerForm").submit();
+            },
+            Close: function () {
                 $(this).dialog("close");
             }
         }
     });
+}
+
+function formCheck(form) {
+    var fields = form.find("select, textarea, input").serializeArray();
+    var check = true;
+
+    $.each(fields, function (i, field) {
+        if (check && !field.value) {
+            alert(field.name + " is required");
+            check = false;
+        }
+    });
+
+    return check;
 }
 
 jQuery.postJSON = function (url, data, success, antiForgeryToken, dataType) {

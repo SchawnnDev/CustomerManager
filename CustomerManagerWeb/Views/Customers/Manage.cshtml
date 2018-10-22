@@ -1,55 +1,53 @@
-﻿@using CustomerManagement.Data
+﻿@using System.Globalization
+@using System.Threading
+@using CustomerManagement.Data
 @model Customer
 
 @{
     Layout = "";
 }
 
-<form method="post" action="Customers/Manage">
+<form method="post" id="customerForm" action="Customers/Manage">
     @Html.AntiForgeryToken()
     
     <input type="hidden" name="id" value="@Model.Id"/>
 
     <div class="form-group">
         <label for="firstName">First Name</label>
-        <input type="text" class="form-control" name="firstName" value="@(string.IsNullOrWhiteSpace(Model.FirstName) ? "" : Model.FirstName)" placeholder="Paul" required>
+        <input type="text" class="form-control ss-item-required" name="firstName" value="@(string.IsNullOrWhiteSpace(Model.FirstName) ? "" : Model.FirstName)">
     </div>
 
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" name="name" value="@(string.IsNullOrWhiteSpace(Model.Name) ? "" : Model.Name)" placeholder="Meyer" required>
+        <input type="text" class="form-control ss-item-required" name="name" value="@(string.IsNullOrWhiteSpace(Model.Name) ? "" : Model.Name)">
     </div>
 
     <div class="form-group">
         <label for="dateOfBirth">Date of Birth</label>
         <div class="input-group date" id="dateOfBirth">
-            <input type="text" name="dateOfBirth" class="form-control" value="@(Model.DateOfBirth.Year == 1 ? "" : Model.DateOfBirth.ToString("dd/MM/yyyy"))" />
+            <input type="text" name="dateOfBirth" class="form-control ss-item-required" value="@(Model.DateOfBirth.Year == 1 ? "" : Model.DateOfBirth.ToShortDateString())" />
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
         </div>
-
     </div>
 
     <div class="form-group">
         <label for="phoneNumber">Phone Number</label>
-        <input type="text" class="form-control" name="phoneNumber" value="@(string.IsNullOrWhiteSpace(Model.PhoneNumber) ? "" : Model.PhoneNumber)" placeholder="+33788490372" required>
+        <input type="text" class="form-control ss-item-required" name="phoneNumber" value="@(string.IsNullOrWhiteSpace(Model.PhoneNumber) ? "" : Model.PhoneNumber)">
     </div>
 
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="text" class="form-control" name="email" value="@(string.IsNullOrWhiteSpace(Model.Email) ? "" : Model.Email)" placeholder="paul.meyer@schawnndev.fr" required>
+        <input type="text" class="form-control ss-item-required" name="email" value="@(string.IsNullOrWhiteSpace(Model.Email) ? "" : Model.Email)">
     </div>
-
-
-    <button type="submit" class="btn btn-success">@(Model.Id != 0 ? "Save" : "Create")</button>
 
 </form>
 
 <script type="text/javascript">
     $(function () {
         $('#dateOfBirth').datetimepicker({
-            format:'DD/MM/YYYY'
+            format: '@(Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper())'
         });
     });
 </script>
