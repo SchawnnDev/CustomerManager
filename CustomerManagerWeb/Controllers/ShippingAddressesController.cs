@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using CustomerManagement.Data;
+using CustomerManagement.IO;
 using CustomerManager.Data;
 using Microsoft.Ajax.Utilities;
 
@@ -16,7 +17,7 @@ namespace CustomerManagerWeb.Controllers
         public ActionResult Index(int id)
         {
             ViewData["id"] = id;
-            var shippingAddresses = DbManager.GetShippingAddresses(id);
+            var shippingAddresses = PluginManager.GetActivePlugin().GetShippingAddresses(id);
             return View(shippingAddresses);
         }
 
@@ -29,7 +30,7 @@ namespace CustomerManagerWeb.Controllers
                 return View("Error");
 
             if (addressId != 0)
-                address = DataManager.GetShippingAddress(DbManager.GetShippingAddresses(id), addressId);
+                address = DataManager.GetShippingAddress(PluginManager.GetActivePlugin().GetShippingAddresses(id), addressId);
 
             if (address == null) address = new ShippingAddress(id);
 
@@ -50,9 +51,9 @@ namespace CustomerManagerWeb.Controllers
             ShippingAddress shippingAddress = new ShippingAddress(id, customerId, address, postalCode);
 
             if (id == 0)
-                DbManager.SaveShippingAddressesToDB(new List<ShippingAddress>() { shippingAddress });
+                PluginManager.GetActivePlugin().SaveShippingAddressesToDb(new List<ShippingAddress>() { shippingAddress });
             else
-                DbManager.UpdateShippingAddress(shippingAddress);
+                PluginManager.GetActivePlugin().UpdateShippingAddress(shippingAddress);
 
             return RedirectToAction("Index", "Customers");
 
@@ -61,7 +62,7 @@ namespace CustomerManagerWeb.Controllers
         [HttpPost, ValidateHeaderAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            DbManager.DeleteShippingAddress(id); // Should 
+            PluginManager.GetActivePlugin().DeleteShippingAddress(id); // Should 
             return Json("[{\"result\":\"success\"}]");
         }
 

@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Graphics.Windows
 {
@@ -73,7 +74,7 @@ namespace CustomerManagerApp.Graphics.Windows
                     List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(CustomerData.Customers, shippingAddresses, SearchType.Name);
 
                     if (toBeSaved.Count != 0)
-                        MessageBox.Show($"Successfully saved {DbManager.SaveShippingAddressesToDB(toBeSaved)} shipping address(es) to database.");
+                        MessageBox.Show($"Successfully saved {PluginManager.GetActivePlugin().SaveShippingAddressesToDb(toBeSaved)} shipping address(es) to database.");
                     else
                         MessageBox.Show("No customers were found for these addresses! Please import them before!", "No customers found", MessageBoxButton.OK, MessageBoxImage.Error);
 
@@ -87,7 +88,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
                     CustomerData.AddWithoutDoubles(customers);
 
-                    MessageBox.Show($"Successfully saved {DbManager.SaveCustomersToDB(customers)} customer(s) to database.");
+                    MessageBox.Show($"Successfully saved {PluginManager.GetActivePlugin().SaveCustomersToDb(customers)} customer(s) to database.");
 
                 }
 

@@ -44,7 +44,7 @@
                 <tr class="context-menu-one" data-customer-id="@customer.Id">
                     <td>@customer.FirstName</td>
                     <td>@customer.Name</td>
-                    <td>@customer.DateOfBirth.ToString(Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern)</td>
+                    <td>@customer.DateOfBirth.ToShortDateString()</td>
                     <td>@customer.PhoneNumber</td>
                     <td>@customer.Email</td>
                 </tr>

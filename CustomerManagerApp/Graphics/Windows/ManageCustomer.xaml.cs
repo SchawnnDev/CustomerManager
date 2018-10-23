@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Graphics.Windows
 {
@@ -81,14 +82,14 @@ namespace CustomerManagerApp.Graphics.Windows
 
             if (Editing)
             {
-                DbManager.UpdateCustomer(Customer);
+                 PluginManager.GetActivePlugin().UpdateCustomer(Customer);
             }
             else
             {
 
                 List<Customer> cust = new List<Customer>() { Customer };
 
-                if (CustomerData.Contains(Customer) || DbManager.SaveCustomersToDB(cust) == 0)
+                if (CustomerData.Contains(Customer) ||  PluginManager.GetActivePlugin().SaveCustomersToDb(cust) == 0)
                 {
                     MessageBox.Show("This customer is already registred in the database.", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;

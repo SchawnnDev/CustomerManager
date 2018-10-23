@@ -5,17 +5,23 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using CustomerManagement.Enums;
+using CustomerManagement.IO;
 
 namespace CustomerManager
 {
-    class Program
+    public class Program
     {
 
         public static List<Customer> Customers = new List<Customer>();
 
         static void Main(string[] args)
         {
-            DbManager.DatabaseName = "CustomerManager";
+            PluginManager.LoadPlugins();
+
+            // TODO : choose plugin
+
+            PluginManager.ChoosePlugin("SqlServer");
+
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             try
@@ -34,8 +40,8 @@ namespace CustomerManager
 
             Console.WriteLine("Loading app CustomerManager...");
 
-            DbManager.Init();
-            Customers = DbManager.LoadData();
+            PluginManager.GetActivePlugin().Init();
+            Customers = PluginManager.GetActivePlugin().LoadData();
 
             Console.WriteLine("App is ready to use! :)");
 
@@ -64,7 +70,7 @@ namespace CustomerManager
                             return false;
                         }
 
-                        DbManager.DataSource = args[0];
+                        PluginManager.GetActivePlugin().SetDataSource(args[0]);
                         break;
                 }
 
@@ -79,7 +85,7 @@ namespace CustomerManager
                         DisplayData.Display(Customers);
                         return true;
                     case "reset":
-                        DbManager.Reset();
+                        PluginManager.GetActivePlugin().Reset();
                         Start();
                         return true;
                     case "test":
@@ -138,11 +144,11 @@ namespace CustomerManager
                         switch (args[2])
                         {
                             case "customer":
-                                DbManager.DeleteCustomer(id);
+                                PluginManager.GetActivePlugin().DeleteCustomer(id);
                                 break;
 
                             case "address":
-                                DbManager.DeleteShippingAddress(id);
+                                PluginManager.GetActivePlugin().DeleteShippingAddress(id);
                                 break;
 
                             default:
@@ -175,21 +181,21 @@ namespace CustomerManager
                 {
                     case "customer":
                         Start();
-                        List<Customer> customers = FileManager.ImportCustomers(args[2], startLine);
+                        var customers = FileManager.ImportCustomers(args[2], startLine);
                         Console.WriteLine($"Imported {customers.Count} customers from {args[2]}");
                         DataManager.AddWithoutDoubles(Customers, customers);
-                        Console.WriteLine($"Saved {DbManager.SaveCustomersToDB(customers)} customers to db!");
+                        Console.WriteLine($"Saved {PluginManager.GetActivePlugin().SaveCustomersToDb(customers)} customers to db!");
                         return true;
                     case "address":
                         Start();
-                        List<ShippingAddress> shippingAddresses = FileManager.ImportShippingAddress(args[2], startLine);
+                        var shippingAddresses = FileManager.ImportShippingAddress(args[2], startLine);
                         Console.WriteLine($"Imported {shippingAddresses.Count} shipping addresses from {args[2]}");
-                        List<ShippingAddress> toBeSaved = Utils.SearchCustomersForShippingAddresses(Customers, shippingAddresses, SearchType.Name);
+                        var toBeSaved = Utils.SearchCustomersForShippingAddresses(Customers, shippingAddresses, SearchType.Name);
 
                         if (toBeSaved.Count != 0)
                         {
                             Console.Write($"Trying to save {toBeSaved.Count} shipping addresses to DB... ");
-                            Console.WriteLine($"Success! {DbManager.SaveShippingAddressesToDB(toBeSaved)} have been saved!");
+                            Console.WriteLine($"Success! {PluginManager.GetActivePlugin().SaveShippingAddressesToDb(toBeSaved)} have been saved!");
                         }
                         else
                             Console.WriteLine("No customers were found for these addresses! Please import them before!");
@@ -209,7 +215,7 @@ namespace CustomerManager
         {
             Console.WriteLine("Syntax: CustomerManager.exe [dataSource | ? | help] [test | import | reset | delete | display] [path | id] [options]");
             Console.WriteLine("    ? or help:     Show help");
-            Console.WriteLine("    dataSoure:     SQL Server Name, Data Source name");
+            Console.WriteLine("    dataSource:     SQL Server Name, Data Source name");
             Console.WriteLine("    start:         Only start app");
             Console.WriteLine("    import:        Import infos from .csv file : import [path] [customer | address] [startLine]");
             Console.WriteLine("    delete:        Delete user or shipping addresses by id : delete [customer | address] [id]");

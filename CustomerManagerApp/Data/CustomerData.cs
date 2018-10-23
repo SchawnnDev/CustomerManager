@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Data
 {
@@ -15,7 +16,7 @@ namespace CustomerManagerApp.Data
 
         public static void Initialize()
         {
-            Customers = DbManager.LoadData();
+            Customers = PluginManager.GetActivePlugin().LoadData();
         }
 
         public static void Clear()

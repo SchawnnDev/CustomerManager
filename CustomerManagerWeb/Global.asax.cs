@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CustomerManagement.IO;
 
 namespace CustomerManagerWeb
 {
@@ -16,6 +17,8 @@ namespace CustomerManagerWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            PluginManager.LoadPlugins();
+            PluginManager.ChoosePlugin("SqlServer");
         }
     }
 }

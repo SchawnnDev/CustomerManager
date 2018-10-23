@@ -254,13 +254,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CustomerManagement\CustomerManagement.csproj">
       <Project>{72452ECE-D927-4EE5-BA3B-DD1A7EB53923}</Project>
       <Name>CustomerManagement</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SqlServer\bin\Debug\SqlServer.dll">
+      <Link>Plugins\SqlServer.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="tree.ico" />

@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp
 {
@@ -22,6 +23,8 @@ namespace CustomerManagerApp
             InitializeComponent();
 
             DataContext = new CustomerListModel();
+
+            PluginManager.LoadPlugins();
 
             new ConnectionWindow(this, Settings.Default.DataSource, true).ShowDialog();
 
@@ -84,7 +87,7 @@ namespace CustomerManagerApp
 
             if (result != MessageBoxResult.Yes) return;
 
-            if (DbManager.Reset())
+            if (PluginManager.GetActivePlugin().Reset())
             {
                 MessageBox.Show("Successfully resetted DataBase.", "Reset");
                 CustomerData.Clear();
@@ -129,7 +132,7 @@ namespace CustomerManagerApp
 
             if (result != MessageBoxResult.Yes) return;
 
-            DbManager.DeleteCustomer(customer.Id);
+            PluginManager.GetActivePlugin().DeleteCustomer(customer.Id);
             Model.Customers.Remove(customer);
 
         }

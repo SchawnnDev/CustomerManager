@@ -26,7 +26,7 @@
                     break;
 
                 case "delete":
-                    if (confirm("Do you really want to delete customer " + customer[0] + " " + customer[1])) {
+                    if (confirm("Do you really want to delete customer " + customer[0] + " " + customer[1] + "?")) {
 
                         var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
 
@@ -78,7 +78,7 @@
                     break;
 
                 case "delete":
-                    if (confirm("Do you really want to delete this shipping address ?")) {
+                    if (confirm("Do you really want to delete this shipping address?")) {
 
                         var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
 
@@ -88,9 +88,14 @@
                         };
 
                         $.postJSON(window.location.href + "ShippingAddresses/Delete/" + id, params, function success(data) {
-                            //options.$trigger[0].remove();
+                            var test = options.$trigger[0].parentElement;
+                            options.$trigger[0].remove();
+                            if (test.childElementCount === 0) {
+                                $("#shippingAddressesTable").hide();
+                                $("#createNewShippingAddress").show();
+                            }
                             //$("#shippingAddresses").parentElement.location.reload();
-                            var numItems = $('.context-menu-two').length;
+                            //var numItems = $('.context-menu-two').length;
                         }, antiForgeryToken);
 
 
@@ -130,7 +135,7 @@ function showAddressPopup(customer, id) {
 }
 
 function showEditAddressPopup(id, addressId) {
-    $("#shippingAddresses").load(window.location.href + "ShippingAddresses/Manage/" + id + "/" + addressId).dialog({
+    $("#editShippingAddress").load(window.location.href + "ShippingAddresses/Manage/" + id + "/" + addressId).dialog({
         //height: 400,
         title: "Editing Shipping Address",
         width: 500,
@@ -142,6 +147,7 @@ function showEditAddressPopup(id, addressId) {
             Save: function () {
                 if (formCheck($(this).dialog()))
                     $(this).find("#addressForm").submit();
+
             },
             Close: function () {
                 $(this).dialog("close");

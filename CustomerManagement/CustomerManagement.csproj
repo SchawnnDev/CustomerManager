@@ -139,10 +139,12 @@
     <Compile Include="Enums\DeleteType.cs" />
     <Compile Include="Enums\ExportSettings.cs" />
     <Compile Include="Enums\SearchType.cs" />
-    <Compile Include="IO\DbManager.cs" />
+    <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="IO\FileManager.cs" />
+    <Compile Include="IO\PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ArrayPrinter.cs" />
+    <Compile Include="Utils\DbUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>

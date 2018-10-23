@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Graphics.Windows
 {
@@ -30,6 +31,8 @@ namespace CustomerManagerApp.Graphics.Windows
             Start = start;
             Main = main;
 
+            DatabaseTypeBox.ItemsSource = PluginManager.GetPluginNames();
+
             if (!Start)
                 ConnectButton.Content = "Save";
 
@@ -50,7 +53,7 @@ namespace CustomerManagerApp.Graphics.Windows
             if (!string.IsNullOrWhiteSpace(txt))
             {
 
-                DbManager.DataSource = txt;
+                PluginManager.GetActivePlugin().SetDataSource(txt);
                 // Settings
                 Settings.Default.DataSource = txt;
                 Settings.Default.Save();
@@ -75,7 +78,7 @@ namespace CustomerManagerApp.Graphics.Windows
                 Cursor = Cursors.Wait;
             });
 
-            DbManager.Init();
+            PluginManager.GetActivePlugin().Init();
             CustomerData.Initialize();
 
             Dispatcher.Invoke(() =>
@@ -98,5 +101,9 @@ namespace CustomerManagerApp.Graphics.Windows
             e.Cancel = CancelClose;
         }
 
+        private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

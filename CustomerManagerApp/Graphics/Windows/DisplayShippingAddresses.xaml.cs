@@ -3,6 +3,7 @@ using CustomerManagerApp.Graphics.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Graphics.Windows
 {
@@ -40,13 +41,12 @@ namespace CustomerManagerApp.Graphics.Windows
         {
             var ship = GetShippingAddressFromSender(sender);
 
-            if (ship == null) return;
 
             MessageBoxResult result = MessageBox.Show($"Do you really want to delete shipping address { ship.Address }", "Delete shipping address", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 
             if (result != MessageBoxResult.Yes) return;
 
-            DbManager.DeleteShippingAddress(ship.Id);
+            PluginManager.GetActivePlugin().DeleteShippingAddress(ship.Id);
             Model.ShippingAddresses.Remove(ship);
 
         }

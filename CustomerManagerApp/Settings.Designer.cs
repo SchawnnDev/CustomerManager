@@ -34,5 +34,17 @@ namespace CustomerManagerApp {
                 this["DataSource"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedDataType {
+            get {
+                return ((string)(this["SelectedDataType"]));
+            }
+            set {
+                this["SelectedDataType"] = value;
+            }
+        }
     }
 }

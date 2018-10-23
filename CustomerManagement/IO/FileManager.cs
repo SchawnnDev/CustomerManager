@@ -21,20 +21,19 @@ namespace CustomerManager.Data
         public static List<Customer> ImportCustomers(string path, int startLine)
         {
 
-            List<Customer> customers = new List<Customer>();
+           var customers = new List<Customer>();
 
             Console.Write($"Searching customers in { path }... ");
 
-            string[] file = ReadFile(path);
+            var file = ReadFile(path);
             if (startLine > file.Length) return customers;
 
-            foreach (string customer in file.Skip(startLine - 1).ToArray())
-            {
-                if (!IsValid(customer, 4)) continue;
-                string[] infos = customer.Split(',');
-                if (infos.Length >= 5)
-                    customers.Add(new Customer(infos[0], infos[1], DateTime.Parse(infos[2]), infos[3], infos[4]));
-            }
+            customers.AddRange(file.Skip(startLine - 1)
+                .ToArray()
+                .Where(customer => IsValid(customer, 4))
+                .Select(customer => customer.Split(','))
+                .Where(infos => infos.Length >= 5)
+                .Select(infos => new Customer(infos[0], infos[1], DateTime.Parse(infos[2]), infos[3], infos[4])));
 
             Console.WriteLine($"{customers.Count} found!");
             return customers;
@@ -43,20 +42,19 @@ namespace CustomerManager.Data
         public static List<ShippingAddress> ImportShippingAddress(string path, int startLine)
         {
 
-            List<ShippingAddress> shippingAddresses = new List<ShippingAddress>();
+            var shippingAddresses = new List<ShippingAddress>();
 
             Console.Write($"Searching shipping addresses in {path}... ");
 
-            string[] file = ReadFile(path);
+            var file = ReadFile(path);
             if (startLine > file.Length) return shippingAddresses;
 
-            foreach (string address in file.Skip(startLine - 1).ToArray())
-            {
-                if (!IsValid(address, 3)) continue;
-                string[] infos = address.Split(',');
-                if (infos.Length >= 4)
-                    shippingAddresses.Add(new ShippingAddress(infos[0], infos[1], infos[2], infos[3]));
-            }
+            shippingAddresses.AddRange(file.Skip(startLine - 1)
+                .ToArray()
+                .Where(address => IsValid(address, 3))
+                .Select(address => address.Split(','))
+                .Where(infos => infos.Length >= 4)
+                .Select(infos => new ShippingAddress(infos[0], infos[1], infos[2], infos[3])));
 
             Console.WriteLine($"{shippingAddresses.Count} found!");
             return shippingAddresses;

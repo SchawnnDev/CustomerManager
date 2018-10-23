@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Graphics.Windows
 {
@@ -43,8 +44,8 @@ namespace CustomerManagerApp.Graphics.Windows
             {
                 Title = $"Editing shipping address from {customer.FirstName} {customer.Name}";
                 CreateButton.Content = "Save";
-                ShippingAddress_Address.Text = Address.Address;
-                ShippingAddress_PostalCode.Text = Address.PostalCode;
+                ShippingAddressAddress.Text = Address.Address;
+                ShippingAddressPostalCode.Text = Address.PostalCode;
             } else
             {
                 Title = $"Create shipping address for {customer.FirstName} {customer.Name}";
@@ -56,21 +57,21 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Check(ShippingAddress_Address) || Check(ShippingAddress_PostalCode)) return;
+            if (Check(ShippingAddressAddress) || Check(ShippingAddressPostalCode)) return;
 
-            Address.Address = ShippingAddress_Address.Text;
-            Address.PostalCode = ShippingAddress_PostalCode.Text;
+            Address.Address = ShippingAddressAddress.Text;
+            Address.PostalCode = ShippingAddressPostalCode.Text;
 
             if (Editing)
             {
-                DbManager.UpdateShippingAddress(Address);
+                 PluginManager.GetActivePlugin().UpdateShippingAddress(Address);
             }
             else
             {
 
-                List<ShippingAddress> ship = new List<ShippingAddress>() { Address };
+                var ship = new List<ShippingAddress>() { Address };
 
-                if (DataManager.Contains(Address,Customer) || DbManager.SaveShippingAddressesToDB(ship) == 0)
+                if (DataManager.Contains(Address,Customer) ||  PluginManager.GetActivePlugin().SaveShippingAddressesToDb(ship) == 0)
                 {
                     MessageBox.Show("This shipping address is already registred in the database.", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -85,7 +86,7 @@ namespace CustomerManagerApp.Graphics.Windows
             CancelClose = false;
             this.Close();
 
-            MessageBox.Show($"Successfully saved shipping address to DB ", "Confirmation");
+            MessageBox.Show($"Successfully saved shipping address to DB", "Confirmation");
 
         }
 

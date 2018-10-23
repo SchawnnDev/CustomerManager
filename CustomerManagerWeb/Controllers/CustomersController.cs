@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CustomerManagement.Data;
 using System.Web.Mvc;
+using CustomerManagement.IO;
 
 namespace CustomerManagerWeb.Controllers
 {
@@ -11,16 +12,16 @@ namespace CustomerManagerWeb.Controllers
         // GET: Customer
         public ActionResult Index()
         {
-            DbManager.DataSource = @"GRIEVOUS\HISTORIAN";
-            DbManager.DatabaseName = "CustomerManager";
-            var customers = DbManager.LoadData();
+            
+            PluginManager.GetActivePlugin().SetDataSource(@"GRIEVOUS\HISTORIAN");
+            var customers = PluginManager.GetActivePlugin().LoadData();
             return View(customers);
         }
 
         [HttpPost, ValidateHeaderAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            DbManager.DeleteShippingAddress(id); // Should 
+             PluginManager.GetActivePlugin().DeleteShippingAddress(id); // Should 
             return Json("[{\"result\":\"success\"}]");
         }
 
@@ -33,7 +34,7 @@ namespace CustomerManagerWeb.Controllers
                 return View("Error");
 
             if (id != 0)
-                customer = DbManager.GetCustomer(id);
+                customer =  PluginManager.GetActivePlugin().GetCustomer(id);
 
             if (customer == null) customer = new Customer();
 
@@ -59,9 +60,9 @@ namespace CustomerManagerWeb.Controllers
             };
 
             if (id == 0)
-                DbManager.SaveCustomersToDB(new List<Customer>() { customer });
+                 PluginManager.GetActivePlugin().SaveCustomersToDb(new List<Customer>() { customer });
             else
-                DbManager.UpdateCustomer(customer);
+                 PluginManager.GetActivePlugin().UpdateCustomer(customer);
 
             return RedirectToAction("Index", "Customers");
 
