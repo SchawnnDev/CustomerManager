@@ -173,7 +173,7 @@ namespace SqlServer
                 {
                     DbUtils.DbLogWriteLine("Checking database & tables...");
 
-                    ExecuteScript("CustomerManagement.SQL.InitializeDatabase.sql", connection);
+                    ExecuteScript("SQL/InitializeDatabase.sql", connection);
 
                 }
             }
@@ -254,7 +254,7 @@ namespace SqlServer
 
             using (var connection = CreateConnection("", DataSource))
             {
-                ExecuteScript("CustomerManagement.SQL.DropDatabase.sql", connection);
+                ExecuteScript("SQL/DropDatabase.sql", connection);
                 Init();
                 return true;
             }
@@ -395,10 +395,8 @@ namespace SqlServer
         {
 
             var server = new Server(new ServerConnection(connection));
-            var assembly = Assembly.GetExecutingAssembly();
 
-            using (var stream = assembly.GetManifestResourceStream(path))
-            using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
+            using (var reader = new StreamReader(path))
                 server.ConnectionContext.ExecuteNonQuery(reader.ReadToEnd());
 
         }
