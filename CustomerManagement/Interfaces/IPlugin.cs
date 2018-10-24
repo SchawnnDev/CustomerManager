@@ -15,6 +15,10 @@ namespace CustomerManagement.Interfaces
 
         string GetDataSource();
 
+        bool IsNeedingFile();
+
+        string GetFileExtension();
+
         void SetDataSource(string dataSource);
 
         void Init();

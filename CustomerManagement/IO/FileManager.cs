@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CustomerManager.Data
+namespace CustomerManagement.IO
 {
     public class FileManager
     {

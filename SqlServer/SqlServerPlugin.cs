@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
 using CustomerManagement.Data;
-using CustomerManagement.Enums;
 using CustomerManagement.Interfaces;
 using CustomerManagement.Utils;
 using CustomerManager.Data;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 
 namespace SqlServer
 {
@@ -22,7 +22,7 @@ namespace SqlServer
         {
             DbUtils.DbLogWrite($"Deleting customer with id={ id}... ");
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -57,7 +57,7 @@ namespace SqlServer
         {
             DbUtils.DbLogWrite($"Deleting shipping address n°{ id}... ");
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -77,7 +77,7 @@ namespace SqlServer
         {
             var customer = new Customer();
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -106,7 +106,7 @@ namespace SqlServer
 
         public string GetName()
         {
-            return "SqlServer";
+            return "SQLServer";
         }
 
         public string GetDataSource()
@@ -119,12 +119,22 @@ namespace SqlServer
             DataSource = dataSource;
         }
 
+        public bool IsNeedingFile()
+        {
+            return false;
+        }
+
+        public string GetFileExtension()
+        {
+            return null;
+        }
+
         public List<ShippingAddress> GetShippingAddresses(int customerId)
         {
 
             var list = new List<ShippingAddress>();
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -159,11 +169,11 @@ namespace SqlServer
 
             try
             {
-                using (var connection = DbUtils.CreateSqlConnection("", DataSource))
+                using (var connection = CreateConnection("", DataSource))
                 {
                     DbUtils.DbLogWriteLine("Checking database & tables...");
 
-                    DbUtils.LoadAndExecuteSqlScript("CustomerManagement.SQL.InitializeDatabase.sql", connection);
+                    ExecuteScript("CustomerManagement.SQL.InitializeDatabase.sql", connection);
 
                 }
             }
@@ -185,7 +195,7 @@ namespace SqlServer
 
             DbUtils.DbLogWriteLine("Loading data from database... ");
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -242,9 +252,9 @@ namespace SqlServer
         {
             DbUtils.DbLogWriteLine("Resetting database... ");
 
-            using (var connection = DbUtils.CreateSqlConnection("", DataSource))
+            using (var connection = CreateConnection("", DataSource))
             {
-                DbUtils.LoadAndExecuteSqlScript("CustomerManagement.SQL.DropDatabase.sql", connection);
+                ExecuteScript("CustomerManagement.SQL.DropDatabase.sql", connection);
                 Init();
                 return true;
             }
@@ -257,7 +267,7 @@ namespace SqlServer
 
             int count = 0;
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -299,7 +309,7 @@ namespace SqlServer
 
             int count = 0;
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
 
                 connection.Open();
@@ -326,7 +336,7 @@ namespace SqlServer
         public void UpdateCustomer(Customer customer)
         {
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
                 connection.Open();
 
@@ -348,7 +358,7 @@ namespace SqlServer
         public void UpdateShippingAddress(ShippingAddress address)
         {
 
-            using (var connection = DbUtils.CreateSqlConnection(DatabaseName, DataSource))
+            using (var connection = CreateConnection(DatabaseName, DataSource))
             {
                 connection.Open();
 
@@ -363,6 +373,36 @@ namespace SqlServer
 
             }
         }
+
+        private SqlConnection CreateConnection(string initialCatalog, string dataSource)
+        {
+
+            var builder = new SqlConnectionStringBuilder
+            {
+                IntegratedSecurity = true
+            };
+
+            if (!string.IsNullOrEmpty(initialCatalog))
+                builder.InitialCatalog = initialCatalog;
+            if (!string.IsNullOrEmpty(dataSource))
+                builder.DataSource = dataSource;
+
+            return new SqlConnection(builder.ConnectionString);
+
+        }
+
+        public void ExecuteScript(string path, SqlConnection connection)
+        {
+
+            var server = new Server(new ServerConnection(connection));
+            var assembly = Assembly.GetExecutingAssembly();
+
+            using (var stream = assembly.GetManifestResourceStream(path))
+            using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
+                server.ConnectionContext.ExecuteNonQuery(reader.ReadToEnd());
+
+        }
+
     }
 
 }

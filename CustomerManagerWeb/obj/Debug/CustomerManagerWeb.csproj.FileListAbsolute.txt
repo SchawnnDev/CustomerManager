@@ -148,3 +148,6 @@ C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\Microsoft.Sql
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\Microsoft.SqlServer.WmiEnum.xml
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\Microsoft.SqlServer.XE.Core.dll
 C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\Microsoft.SqlServer.XEvent.Linq.dll
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\SQL\DropDatabase.sql
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\SQL\InitializeDatabase.sql
+C:\Users\Meyer\source\repos\CustomerManager\CustomerManagerWeb\bin\CustomerManagement.dll.config

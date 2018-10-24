@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManager", "CustomerManager\CustomerManager.csproj", "{0264E371-48E4-47F4-A406-BF2916F76792}"
 	ProjectSection(ProjectDependencies) = postProject
 		{92C9F437-AF37-465C-9104-923589D21093} = {92C9F437-AF37-465C-9104-923589D21093}
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC} = {18DCF7BC-9381-4984-97D9-D95EF68328CC}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement", "CustomerManagement\CustomerManagement.csproj", "{72452ECE-D927-4EE5-BA3B-DD1A7EB53923}"
@@ -13,16 +14,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagerApp", "CustomerManagerApp\CustomerManagerApp.csproj", "{21486725-F140-4524-8699-DAE7A80B2C26}"
 	ProjectSection(ProjectDependencies) = postProject
 		{92C9F437-AF37-465C-9104-923589D21093} = {92C9F437-AF37-465C-9104-923589D21093}
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC} = {18DCF7BC-9381-4984-97D9-D95EF68328CC}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagerWeb", "CustomerManagerWeb\CustomerManagerWeb.csproj", "{E5A8697A-2257-4D62-9A96-59642E780010}"
 	ProjectSection(ProjectDependencies) = postProject
 		{92C9F437-AF37-465C-9104-923589D21093} = {92C9F437-AF37-465C-9104-923589D21093}
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC} = {18DCF7BC-9381-4984-97D9-D95EF68328CC}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{35C35B23-5413-4886-B6FF-4E3ECDA84DE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServer", "SqlServer\SqlServer.csproj", "{92C9F437-AF37-465C-9104-923589D21093}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "SQLite\SQLite.csproj", "{18DCF7BC-9381-4984-97D9-D95EF68328CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,12 +55,17 @@ Global
 		{92C9F437-AF37-465C-9104-923589D21093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92C9F437-AF37-465C-9104-923589D21093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92C9F437-AF37-465C-9104-923589D21093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{92C9F437-AF37-465C-9104-923589D21093} = {35C35B23-5413-4886-B6FF-4E3ECDA84DE2}
+		{18DCF7BC-9381-4984-97D9-D95EF68328CC} = {35C35B23-5413-4886-B6FF-4E3ECDA84DE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DAAB66D1-E62F-4EAC-B437-59959CB6D7F5}

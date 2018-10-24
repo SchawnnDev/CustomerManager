@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using CustomerManagement.IO;
 
 namespace CustomerManagerApp.Graphics.Windows
 {
@@ -26,7 +27,7 @@ namespace CustomerManagerApp.Graphics.Windows
         {
 
             var path = FilePath.Text;
-            ExportSettings[] settings = GetExportSettings();
+            var settings = GetExportSettings();
             if (!IsPathValid(path)) return;
             if (settings.Length == 0)
             {
@@ -49,7 +50,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             try
             {
-                int customerCount = FileManager.ExportCustomers(path, CustomerData.Customers, settings);
+                var customerCount = FileManager.ExportCustomers(path, CustomerData.Customers, settings);
 
                 if (customerCount != 0)
                     MessageBox.Show($"Successfully saved {customerCount} customer(s) to {path}.");
@@ -72,19 +73,19 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private ExportSettings[] GetExportSettings()
         {
-            List<ExportSettings> settings = new List<ExportSettings>();
+            var settings = new List<ExportSettings>();
 
-            if (Check_ID.IsChecked.Value)
+            if (CheckId.IsChecked.Value)
                 settings.Add(ExportSettings.Id);
-            if (Check_FirstName.IsChecked.Value)
+            if (CheckFirstName.IsChecked.Value)
                 settings.Add(ExportSettings.First_Name);
-            if (Check_Name.IsChecked.Value)
+            if (CheckName.IsChecked.Value)
                 settings.Add(ExportSettings.Name);
-            if (Check_DateOfBirth.IsChecked.Value)
+            if (CheckDateOfBirth.IsChecked.Value)
                 settings.Add(ExportSettings.Date_of_Birth);
-            if (Check_PhoneNumber.IsChecked.Value)
+            if (CheckPhoneNumber.IsChecked.Value)
                 settings.Add(ExportSettings.Phone_Number);
-            if (Check_Email.IsChecked.Value)
+            if (CheckEmail.IsChecked.Value)
                 settings.Add(ExportSettings.Email);
 
             return settings.ToArray();
@@ -99,7 +100,7 @@ namespace CustomerManagerApp.Graphics.Windows
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog
+            var saveFileDialog = new SaveFileDialog
             {
                 Title = "Select a folder",
                 CheckPathExists = true,
@@ -118,14 +119,11 @@ namespace CustomerManagerApp.Graphics.Windows
 
         private bool IsPathValid(string txt)
         {
-            if (string.IsNullOrWhiteSpace(txt) || !txt.EndsWith(".csv"))
-            {
-                FilePath.BorderBrush = Brushes.Red;
-                SystemSounds.Beep.Play();
-                return false;
-            }
+            if (!string.IsNullOrWhiteSpace(txt) && txt.EndsWith(".csv")) return true;
+            FilePath.BorderBrush = Brushes.Red;
+            SystemSounds.Beep.Play();
+            return false;
 
-            return true;
         }
 
     }

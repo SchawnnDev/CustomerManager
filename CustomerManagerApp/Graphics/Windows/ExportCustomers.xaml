@@ -43,22 +43,22 @@
         <TextBox x:Name="FilePath" IsReadOnly="True" Grid.Column="1" Grid.Row="1" TextWrapping="NoWrap"  ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto" Padding="0,5,0,5" Margin="0,15,80,15"/>
 
         <Label Content="ID" Grid.Column="0" Grid.Row="2"/>
-        <CheckBox x:Name="Check_ID" Grid.Column="1" Grid.Row="2" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="CheckId" Grid.Column="1" Grid.Row="2" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <Label Content="First Name" Grid.Column="0" Grid.Row="3"/>
-        <CheckBox x:Name="Check_FirstName" Grid.Column="1" Grid.Row="3" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="CheckFirstName" Grid.Column="1" Grid.Row="3" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <Label Content="Name" Grid.Column="0" Grid.Row="4"/>
-        <CheckBox x:Name="Check_Name" Grid.Column="1" Grid.Row="4" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="CheckName" Grid.Column="1" Grid.Row="4" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <Label Content="Date of Birth" Grid.Column="0" Grid.Row="5"/>
-        <CheckBox x:Name="Check_DateOfBirth" Grid.Column="1" Grid.Row="5" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="CheckDateOfBirth" Grid.Column="1" Grid.Row="5" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <Label Content="Phone Number" Grid.Column="0" Grid.Row="6"/>
-        <CheckBox x:Name="Check_PhoneNumber" Grid.Column="1" Grid.Row="6" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="CheckPhoneNumber" Grid.Column="1" Grid.Row="6" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <Label Content="Email" Grid.Column="0" Grid.Row="7"/>
-        <CheckBox x:Name="Check_Email" Grid.Column="1" Grid.Row="7" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <CheckBox x:Name="CheckEmail" Grid.Column="1" Grid.Row="7" IsChecked="True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         
 
     </Grid>

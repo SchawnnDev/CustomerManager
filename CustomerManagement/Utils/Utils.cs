@@ -17,18 +17,22 @@ namespace CustomerManagement.Utils
         public static List<ShippingAddress> SearchShippingAddressesForCustomer(Customer customer, List<ShippingAddress> shippingAddresses, SearchType searchType)
         {
 
-            List<ShippingAddress> addresses = new List<ShippingAddress>();
+           var addresses = new List<ShippingAddress>();
 
-            foreach (ShippingAddress address in shippingAddresses) // if statement better in or out of the loop?
+            foreach (var address in shippingAddresses) // if statement better in or out of the loop?
             {
-                SearchType type = searchType;
+                var type = searchType;
 
                 if (type == SearchType.Variable) type = FindCorrectSearchType(customer, address);
-                if (type == SearchType.Id && address.CustomerId == customer.Id) // Better switch?
-                    addresses.Add(address);
-                else if (type == SearchType.Name && address.FirstName.Equals(customer.FirstName) && address.Name.Equals(customer.Name))
-                    addresses.Add(address); // Admitting that no other has the same name&firstname
-
+                switch (type)
+                {
+                    // Better switch?
+                    case SearchType.Id when address.CustomerId == customer.Id:
+                    // Admitting that no other has the same name&firstname
+                    case SearchType.Name when address.FirstName.Equals(customer.FirstName) && address.Name.Equals(customer.Name):
+                        addresses.Add(address);
+                        break;
+                }
             }
 
             return addresses;
@@ -38,20 +42,18 @@ namespace CustomerManagement.Utils
         public static void SearchShippingAddressesForCustomers(List<Customer> customers, List<ShippingAddress> shippingAddresses, SearchType type)
         {
 
-            foreach (Customer customer in customers)
-            {
+            foreach (var customer in customers)
                 customer.ShippingAddresses.AddRange(SearchShippingAddressesForCustomer(customer, shippingAddresses, type));
-            }
 
         }
 
         public static List<ShippingAddress> SearchCustomersForShippingAddresses(List<Customer> customers,List<ShippingAddress> shippingAddresses, SearchType type)
         {
-            List<ShippingAddress> addresses = new List<ShippingAddress>();
+            var addresses = new List<ShippingAddress>();
 
-            foreach (ShippingAddress shippingAddress in shippingAddresses)
+            foreach (var shippingAddress in shippingAddresses)
             {
-                ShippingAddress address = DataManager.AddWithoutDoubles(type == SearchType.Id ? DataManager.Find(customers, shippingAddress.CustomerId) : DataManager.Find(customers, shippingAddress.Name, shippingAddress.FirstName), shippingAddress);
+                var address = DataManager.AddWithoutDoubles(type == SearchType.Id ? DataManager.Find(customers, shippingAddress.CustomerId) : DataManager.Find(customers, shippingAddress.Name, shippingAddress.FirstName), shippingAddress);
                 if (address != null) addresses.Add(address);
             }
             return addresses;
@@ -74,7 +76,7 @@ namespace CustomerManagement.Utils
 
         public static bool IsAlphanumeric(string str)
         {
-            return !String.IsNullOrWhiteSpace(str) && Regex.IsMatch(str, @"^[a-zA-ZÀ-ž]+$");
+            return !string.IsNullOrWhiteSpace(str) && Regex.IsMatch(str, @"^[a-zA-ZÀ-ž]+$");
         }
 
         public static bool DateEquals(DateTime date, DateTime other)

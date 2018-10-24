@@ -26,10 +26,10 @@ namespace CustomerManagement.IO
             assemblies.AddRange(Directory.GetFiles(path, "*.dll").Select(dllFile => Assembly.Load(AssemblyName.GetAssemblyName(dllFile))));
 
             var pluginTypes = (from assembly in assemblies
-                where assembly != null
-                from type in assembly.GetTypes()
-                where !type.IsInterface && !type.IsAbstract && type.GetInterface(typeof(IPlugin).FullName) != null
-                select type).ToList();
+                               where assembly != null
+                               from type in assembly.GetTypes()
+                               where !type.IsInterface && !type.IsAbstract && type.GetInterface(typeof(IPlugin).FullName) != null
+                               select type).ToList();
 
             // Add plugins to list
 
@@ -52,14 +52,22 @@ namespace CustomerManagement.IO
 
         }
 
-        public static List<string> GetPluginNames()
+        public static int GetIndexFromName(string name) => GetPluginNames().FindIndex(x => x.StartsWith(name));
+
+        public static List<string> GetPluginNames() => Plugins.Select(plugin => plugin.GetName()).ToList();
+
+        public static IPlugin GetPluginFromName(string name)
         {
-            return Plugins.Select(plugin => plugin.GetName()).ToList();
+            foreach (var plugin in Plugins)
+                if (plugin.GetName() == name)
+                    return plugin;
+
+            return null;
         }
 
         public static IPlugin GetActivePlugin()
         {
-            return Plugins.ToArray()[0];
+            return ChosenPlugin;
         }
 
     }

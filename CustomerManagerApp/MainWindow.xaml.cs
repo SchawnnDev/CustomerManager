@@ -26,7 +26,7 @@ namespace CustomerManagerApp
 
             PluginManager.LoadPlugins();
 
-            new ConnectionWindow(this, Settings.Default.DataSource, true).ShowDialog();
+            new ConnectionWindow(this, true).ShowDialog();
 
         }
 
@@ -38,7 +38,7 @@ namespace CustomerManagerApp
         private void MenuSettings_Click(object sender, RoutedEventArgs e)
         {
 
-            new ConnectionWindow(this, Settings.Default.DataSource, false).ShowDialog();
+            new ConnectionWindow(this, false).ShowDialog();
 
         }
 
@@ -54,7 +54,7 @@ namespace CustomerManagerApp
 
         private void ImportCustomer_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = "CSV Files|*.csv",
                 Title = "Select a CSV File"
@@ -68,7 +68,7 @@ namespace CustomerManagerApp
 
         private void ImportShippingAddress_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = "CSV Files|*.csv",
                 Title = "Select a CSV File",
@@ -83,13 +83,13 @@ namespace CustomerManagerApp
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show($"Do you really want to reset the Database ?", "Reset Database", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            var result = MessageBox.Show($"Do you really want to reset the Database ?", "Reset Database", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 
             if (result != MessageBoxResult.Yes) return;
 
             if (PluginManager.GetActivePlugin().Reset())
             {
-                MessageBox.Show("Successfully resetted DataBase.", "Reset");
+                MessageBox.Show("Successfully reset DataBase.", "Reset");
                 CustomerData.Clear();
                 return;
             }
