@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 using CustomerManagement.Data;
 using CustomerManagement.Interfaces;
 using CustomerManagement.Utils;
-using CustomerManager.Data;
 
-namespace SQLite
+namespace SQLitePlugin
 {
-    public class SQLitePlugin : IPlugin
+    public class SQLitePlugin : IDatabasePlugin
     {
         private string DataSource { get; set; }
 
@@ -27,7 +26,7 @@ namespace SQLite
             return DataSource;
         }
 
-        public bool IsNeedingFile()
+        public bool NeedsFile()
         {
             return true;
         }
@@ -175,11 +174,11 @@ namespace SQLite
                     if (!reader.Read()) return new Customer();
 
                     customer.Id = id;
-                    customer.FirstName = reader["firstname"].ToString();
-                    customer.Name = reader["name"].ToString();
+                    customer.FirstName = reader["firstname"] as string;
+                    customer.Name = reader["name"] as string;
                     customer.DateOfBirth = (DateTime)reader["dateofbirth"];
-                    customer.PhoneNumber = reader["phonenumber"].ToString();
-                    customer.Email = reader["email"].ToString();
+                    customer.PhoneNumber = reader["phonenumber"] as string;
+                    customer.Email = reader["email"] as string;
 
                 }
 
@@ -208,8 +207,8 @@ namespace SQLite
                     {
 
                         var id = (int)reader["id"];
-                        var address = reader["address"].ToString();
-                        var postalCode = reader["postalcode"].ToString();
+                        var address = reader["address"] as string;
+                        var postalCode = reader["postalcode"] as string;
                         list.Add(new ShippingAddress(id, customerId, address, postalCode));
 
                     }
@@ -221,7 +220,7 @@ namespace SQLite
 
         }
 
-        public List<Customer> LoadData()
+        public List<Customer> GetCustomers()
         {
 
             var list = new List<Customer>();
@@ -235,14 +234,17 @@ namespace SQLite
 
                 connection.Open();
 
-                var cmd = new SQLiteCommand("select Customers.id,ShippingAddresses.id as addressId,firstname,name,dateofbirth,phonenumber,email,ShippingAddresses.address, ShippingAddresses.postalcode from (Customers left join ShippingAddresses on Customers.id=ShippingAddresses.customerid)", connection);
+                var cmd = new SQLiteCommand(
+                    @"select Customers.id,ShippingAddresses.id as addressId,firstname,name,dateofbirth,phonenumber,email,ShippingAddresses.address, ShippingAddresses.postalcode 
+                        from (Customers left join ShippingAddresses on Customers.id=ShippingAddresses.customerid)",
+                    connection);
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
 
-                        var id = int.Parse(reader["id"].ToString());
+                        var id = (int)(long)reader["id"];
                         var address = reader["address"];
                         var postalCode = reader["postalcode"];
                         Customer customer;
@@ -270,21 +272,15 @@ namespace SQLite
 
             }
 
-            if (customers != 0)
-                DbUtils.DbLogWriteLine($"{customers} customer(s) found.");
-            else
-                DbUtils.DbLogWriteLine("No customers found. :(");
+            DbUtils.DbLogWriteLine(customers != 0 ? $"{customers} customer(s) found." : "No customers found. :(");
 
-            if (addresses != 0)
-                DbUtils.DbLogWriteLine($"{customers} addresse(s) found.");
-            else
-                DbUtils.DbLogWriteLine("No addresses found. :(");
+            DbUtils.DbLogWriteLine(addresses != 0 ? $"{customers} address(es) found." : "No addresses found. :(");
 
             return list;
         }
 
 
-        public int SaveCustomersToDb(List<Customer> customers)
+        public int SaveCustomers(List<Customer> customers)
         {
 
             if (customers.Count == 0) return 0;
@@ -334,7 +330,7 @@ namespace SQLite
 
         }
 
-        public int SaveShippingAddressesToDb(List<ShippingAddress> shippingAddresses)
+        public int SaveShippingAddresses(List<ShippingAddress> shippingAddresses)
         {
 
             if (shippingAddresses.Count == 0) return 0;

@@ -1,5 +1,5 @@
 ﻿using CustomerManagement.Data;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             Editing = editing;
             CancelClose = true;
-            Address = address;
+            Address = address ?? new ShippingAddress();
             DisplayShippingAddresses = displayShippingAddresses;
             Customer = customer;
 
@@ -71,7 +71,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
                 var ship = new List<ShippingAddress>() { Address };
 
-                if (DataManager.Contains(Address,Customer) ||  PluginManager.GetActivePlugin().SaveShippingAddressesToDb(ship) == 0)
+                if (DataManager.Contains(Address,Customer) ||  PluginManager.GetActivePlugin().SaveShippingAddresses(ship) == 0)
                 {
                     MessageBox.Show("This shipping address is already registred in the database.", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;

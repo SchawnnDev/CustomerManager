@@ -6,14 +6,14 @@ using System.Reflection;
 using CustomerManagement.Data;
 using CustomerManagement.Interfaces;
 using CustomerManagement.Utils;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 
-namespace SqlServer
+namespace SqlServerPlugin
 {
 
-    public class SqlServerPlugin : IPlugin
+    public class SqlServerPlugin : IDatabasePlugin
     {
         private string DataSource { get; set; }
         private string DatabaseName { get; } = "CustomerManager";
@@ -119,7 +119,7 @@ namespace SqlServer
             DataSource = dataSource;
         }
 
-        public bool IsNeedingFile()
+        public bool NeedsFile()
         {
             return false;
         }
@@ -186,7 +186,7 @@ namespace SqlServer
 
         }
 
-        public List<Customer> LoadData()
+        public List<Customer> GetCustomers()
         {
 
             var list = new List<Customer>();
@@ -235,15 +235,9 @@ namespace SqlServer
 
             }
 
-            if (customers != 0)
-                DbUtils.DbLogWriteLine($"{customers} customer(s) found.");
-            else
-                DbUtils.DbLogWriteLine("No customers found. :(");
+            DbUtils.DbLogWriteLine(customers != 0 ? $"{customers} customer(s) found." : "No customers found. :(");
 
-            if (addresses != 0)
-                DbUtils.DbLogWriteLine($"{customers} addresse(s) found.");
-            else
-                DbUtils.DbLogWriteLine("No addresses found. :(");
+            DbUtils.DbLogWriteLine(addresses != 0 ? $"{customers} address(es) found." : "No addresses found. :(");
 
             return list;
         }
@@ -260,12 +254,12 @@ namespace SqlServer
             }
         }
 
-        public int SaveCustomersToDb(List<Customer> customers)
+        public int SaveCustomers(List<Customer> customers)
         {
 
             if (customers.Count == 0) return 0;
 
-            int count = 0;
+            var count = 0;
 
             using (var connection = CreateConnection(DatabaseName, DataSource))
             {
@@ -286,11 +280,9 @@ namespace SqlServer
                         cmd.Parameters.AddWithValue("@phonenumber", customer.PhoneNumber);
                         cmd.Parameters.AddWithValue("@email", customer.Email);
                         var retour = cmd.ExecuteScalar();
-                        if (retour != null)
-                        {
-                            customer.Id = (int)retour;
-                            count++;
-                        }
+                        if (retour == null) continue;
+                        customer.Id = (int)retour;
+                        count++;
 
                     }
 
@@ -302,12 +294,12 @@ namespace SqlServer
 
         }
 
-        public int SaveShippingAddressesToDb(List<ShippingAddress> shippingAddresses)
+        public int SaveShippingAddresses(List<ShippingAddress> shippingAddresses)
         {
 
             if (shippingAddresses.Count == 0) return 0;
 
-            int count = 0;
+            var count = 0;
 
             using (var connection = CreateConnection(DatabaseName, DataSource))
             {

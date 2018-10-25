@@ -5,7 +5,6 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using CustomerManager.Data;
 
 namespace CustomerManagerApp.Graphics.Models
 {

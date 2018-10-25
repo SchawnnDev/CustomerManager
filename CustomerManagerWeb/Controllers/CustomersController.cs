@@ -14,7 +14,7 @@ namespace CustomerManagerWeb.Controllers
         {
             
             PluginManager.GetActivePlugin().SetDataSource(@"GRIEVOUS\HISTORIAN");
-            var customers = PluginManager.GetActivePlugin().LoadData();
+            var customers = PluginManager.GetActivePlugin().GetCustomers();
             return View(customers);
         }
 
@@ -60,7 +60,7 @@ namespace CustomerManagerWeb.Controllers
             };
 
             if (id == 0)
-                 PluginManager.GetActivePlugin().SaveCustomersToDb(new List<Customer>() { customer });
+                 PluginManager.GetActivePlugin().SaveCustomers(new List<Customer>() { customer });
             else
                  PluginManager.GetActivePlugin().UpdateCustomer(customer);
 

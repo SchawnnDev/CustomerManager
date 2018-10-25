@@ -287,12 +287,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\SqlServer\bin\Debug\SqlServer.dll">
-      <Link>Plugins\SqlServer.dll</Link>
+    <Content Include="..\SqlServer\bin\Debug\SQLServerPlugin.dll">
+      <Link>Plugins\SQLServerPlugin.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\SQLite\bin\Debug\SQLite.dll">
-      <Link>Plugins\SQLite.dll</Link>
+    <Content Include="..\SQLite\bin\Debug\SQLitePlugin.dll">
+      <Link>Plugins\SQLitePlugin.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	<Content Include="..\XMLPlugin\bin\Debug\XMLPlugin.dll">
+      <Link>Plugins\XMLPlugin.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -7,8 +7,8 @@
     <ProjectGuid>{18DCF7BC-9381-4984-97D9-D95EF68328CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SQLite</RootNamespace>
-    <AssemblyName>SQLite</AssemblyName>
+    <RootNamespace>SQLitePlugin</RootNamespace>
+    <AssemblyName>SQLitePlugin</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

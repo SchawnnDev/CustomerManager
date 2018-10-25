@@ -7,8 +7,8 @@
     <ProjectGuid>{92C9F437-AF37-465C-9104-923589D21093}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SqlServer</RootNamespace>
-    <AssemblyName>SqlServer</AssemblyName>
+    <RootNamespace>SQLServerPlugin</RootNamespace>
+    <AssemblyName>SQLServerPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

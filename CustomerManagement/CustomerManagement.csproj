@@ -158,7 +158,7 @@
     <Compile Include="Enums\DeleteType.cs" />
     <Compile Include="Enums\ExportSettings.cs" />
     <Compile Include="Enums\SearchType.cs" />
-    <Compile Include="Interfaces\IPlugin.cs" />
+    <Compile Include="Interfaces\IDatabasePlugin.cs" />
     <Compile Include="IO\ConfigFile.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="IO\PluginManager.cs" />

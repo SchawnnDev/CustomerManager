@@ -1,13 +1,13 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Utils;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using CustomerManagement.Enums;
 using CustomerManagement.IO;
 
-namespace CustomerManager
+namespace CustomerManagement
 {
     public class Program
     {
@@ -41,7 +41,7 @@ namespace CustomerManager
             Console.WriteLine("Loading app CustomerManager...");
 
             PluginManager.GetActivePlugin().Init();
-            Customers = PluginManager.GetActivePlugin().LoadData();
+            Customers = PluginManager.GetActivePlugin().GetCustomers();
 
             Console.WriteLine("App is ready to use! :)");
 
@@ -184,7 +184,7 @@ namespace CustomerManager
                         var customers = FileManager.ImportCustomers(args[2], startLine);
                         Console.WriteLine($"Imported {customers.Count} customers from {args[2]}");
                         DataManager.AddWithoutDoubles(Customers, customers);
-                        Console.WriteLine($"Saved {PluginManager.GetActivePlugin().SaveCustomersToDb(customers)} customers to db!");
+                        Console.WriteLine($"Saved {PluginManager.GetActivePlugin().SaveCustomers(customers)} customers to db!");
                         return true;
                     case "address":
                         Start();
@@ -195,7 +195,7 @@ namespace CustomerManager
                         if (toBeSaved.Count != 0)
                         {
                             Console.Write($"Trying to save {toBeSaved.Count} shipping addresses to DB... ");
-                            Console.WriteLine($"Success! {PluginManager.GetActivePlugin().SaveShippingAddressesToDb(toBeSaved)} have been saved!");
+                            Console.WriteLine($"Success! {PluginManager.GetActivePlugin().SaveShippingAddresses(toBeSaved)} have been saved!");
                         }
                         else
                             Console.WriteLine("No customers were found for these addresses! Please import them before!");

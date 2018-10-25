@@ -1,5 +1,5 @@
 ﻿using CustomerManagement.Data;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using CustomerManagerApp.Data;
 using System.Linq;
 using System.Media;
@@ -51,7 +51,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             var plugin = PluginManager.GetPluginFromName(databaseType);
 
-            if (plugin != null && plugin.IsNeedingFile())
+            if (plugin != null && plugin.NeedsFile())
                 BrowseButton.IsEnabled = true;
 
         }
@@ -107,7 +107,7 @@ namespace CustomerManagerApp.Graphics.Windows
             });
 
             PluginManager.GetActivePlugin().Init();
-            CustomerData.Initialize();
+            CustomerData.Initialize(Main);
 
             Dispatcher.Invoke(() =>
             {
@@ -155,7 +155,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
             var name = box.SelectedValue.ToString();
 
-            BrowseButton.IsEnabled = PluginManager.GetPluginFromName(name).IsNeedingFile();
+            BrowseButton.IsEnabled = PluginManager.GetPluginFromName(name).NeedsFile();
 
             DataSource.Text = ConfigFile.GetValue($"DataSource_{ name }");
 

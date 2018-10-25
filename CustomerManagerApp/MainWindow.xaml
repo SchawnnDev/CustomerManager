@@ -11,9 +11,6 @@
         WindowStartupLocation="CenterScreen">
     
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition MaxHeight="450"/>
@@ -52,7 +49,7 @@
 
         </DockPanel>
 
-        <DataGrid Grid.Row="1"  ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Customers}" IsReadOnly="True" x:Name="CustomersGrid" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1"  ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Customers, IsAsync=true}" IsReadOnly="True" x:Name="CustomersGrid" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>

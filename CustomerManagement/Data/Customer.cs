@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace CustomerManagement.Data
 {
@@ -15,7 +16,7 @@ namespace CustomerManagement.Data
 
         public Customer()
         {
-
+            ShippingAddresses = new List<ShippingAddress>();
         }
 
         public Customer(string firstName, string name, DateTime dateOfBirth, string phoneNumber, string email)
@@ -26,6 +27,14 @@ namespace CustomerManagement.Data
             PhoneNumber = phoneNumber;
             Email = email;
             ShippingAddresses = new List<ShippingAddress>();
+        }
+
+        public void AddShippingAddress(ShippingAddress address)
+        {
+            if (DataManager.Contains(address, this)) return;
+            ShippingAddresses.Add(address);
+            address.Id = ShippingAddresses.Count;
+
         }
 
         public override bool Equals(object obj)

@@ -1,12 +1,6 @@
-﻿using CustomerManagement.Data;
-using CustomerManagement.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace CustomerManager.Data
+namespace CustomerManagement.Data
 {
     public class DataManager
     {
@@ -94,7 +88,7 @@ namespace CustomerManager.Data
 
         public static List<ShippingAddress> GetShippingAddresses(List<Customer> customers)
         {
-            List<ShippingAddress> shippingAddresses = new List<ShippingAddress>();
+            var shippingAddresses = new List<ShippingAddress>();
 
             foreach (var customer in customers)
                 shippingAddresses.AddRange(customer.ShippingAddresses);
@@ -103,11 +97,22 @@ namespace CustomerManager.Data
 
         }
 
+        public static List<ShippingAddress> GetShippingAddresses(List<Customer> customers, int customerId)
+        {
+
+            foreach (var customer in customers)
+                if (customer.Id == customerId)
+                    return customer.ShippingAddresses;
+
+            return new List<ShippingAddress>();
+
+        }
+
         public static ShippingAddress GetShippingAddress(List<ShippingAddress> addresses, int id)
         {
-            foreach (var a in addresses)
-                if (a.Id == id)
-                    return a;
+            foreach (var address in addresses)
+                if (address.Id == id)
+                    return address;
             return null;
         }
 

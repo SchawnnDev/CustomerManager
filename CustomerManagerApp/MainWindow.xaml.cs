@@ -89,8 +89,9 @@ namespace CustomerManagerApp
 
             if (PluginManager.GetActivePlugin().Reset())
             {
-                MessageBox.Show("Successfully reset DataBase.", "Reset");
                 CustomerData.Clear();
+                Model.Customers.Clear();
+                MessageBox.Show("Successfully reset Database.", "Reset");
                 return;
             }
 
@@ -128,7 +129,7 @@ namespace CustomerManagerApp
 
             if (customer == null) return;
 
-            MessageBoxResult result = MessageBox.Show($"Do you really want to delete customer { customer.FirstName } {customer.Name}?", "Delete Customer", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            var result = MessageBox.Show($"Do you really want to delete customer { customer.FirstName } {customer.Name}?", "Delete Customer", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 
             if (result != MessageBoxResult.Yes) return;
 

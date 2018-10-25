@@ -6,7 +6,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using CustomerManagement.Data;
 using CustomerManagement.IO;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using Microsoft.Ajax.Utilities;
 
 namespace CustomerManagerWeb.Controllers
@@ -51,7 +51,7 @@ namespace CustomerManagerWeb.Controllers
             ShippingAddress shippingAddress = new ShippingAddress(id, customerId, address, postalCode);
 
             if (id == 0)
-                PluginManager.GetActivePlugin().SaveShippingAddressesToDb(new List<ShippingAddress>() { shippingAddress });
+                PluginManager.GetActivePlugin().SaveShippingAddresses(new List<ShippingAddress>() { shippingAddress });
             else
                 PluginManager.GetActivePlugin().UpdateShippingAddress(shippingAddress);
 

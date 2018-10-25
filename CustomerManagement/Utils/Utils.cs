@@ -1,6 +1,6 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Enums;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;

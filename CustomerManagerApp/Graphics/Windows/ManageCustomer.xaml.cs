@@ -1,6 +1,6 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Utils;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using CustomerManagerApp.Data;
 using System;
 using System.Collections.Generic;
@@ -89,7 +89,7 @@ namespace CustomerManagerApp.Graphics.Windows
 
                 List<Customer> cust = new List<Customer>() { Customer };
 
-                if (CustomerData.Contains(Customer) ||  PluginManager.GetActivePlugin().SaveCustomersToDb(cust) == 0)
+                if (CustomerData.Contains(Customer) ||  PluginManager.GetActivePlugin().SaveCustomers(cust) == 0)
                 {
                     MessageBox.Show("This customer is already registred in the database.", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;

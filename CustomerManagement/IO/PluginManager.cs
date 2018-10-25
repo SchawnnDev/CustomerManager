@@ -11,12 +11,12 @@ namespace CustomerManagement.IO
     public class PluginManager
     {
 
-        private static IPlugin ChosenPlugin { get; set; }
-        public static List<IPlugin> Plugins { get; private set; }
+        private static IDatabasePlugin ChosenPlugin { get; set; }
+        public static List<IDatabasePlugin> Plugins { get; private set; }
 
         public static void LoadPlugins()
         {
-            Plugins = new List<IPlugin>();
+            Plugins = new List<IDatabasePlugin>();
 
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)?.Substring(6) + "\\Plugins";
 
@@ -28,13 +28,13 @@ namespace CustomerManagement.IO
             var pluginTypes = (from assembly in assemblies
                                where assembly != null
                                from type in assembly.GetTypes()
-                               where !type.IsInterface && !type.IsAbstract && type.GetInterface(typeof(IPlugin).FullName) != null
+                               where !type.IsInterface && !type.IsAbstract && type.GetInterface(typeof(IDatabasePlugin).FullName) != null
                                select type).ToList();
 
             // Add plugins to list
 
             foreach (var type in pluginTypes)
-                Plugins.Add((IPlugin)Activator.CreateInstance(type));
+                Plugins.Add((IDatabasePlugin)Activator.CreateInstance(type));
 
         }
 
@@ -56,7 +56,7 @@ namespace CustomerManagement.IO
 
         public static List<string> GetPluginNames() => Plugins.Select(plugin => plugin.GetName()).ToList();
 
-        public static IPlugin GetPluginFromName(string name)
+        public static IDatabasePlugin GetPluginFromName(string name)
         {
             foreach (var plugin in Plugins)
                 if (plugin.GetName() == name)
@@ -65,7 +65,7 @@ namespace CustomerManagement.IO
             return null;
         }
 
-        public static IPlugin GetActivePlugin()
+        public static IDatabasePlugin GetActivePlugin()
         {
             return ChosenPlugin;
         }

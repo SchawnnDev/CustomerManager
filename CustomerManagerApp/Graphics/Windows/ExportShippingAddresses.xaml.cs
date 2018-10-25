@@ -1,5 +1,5 @@
 ﻿using CustomerManagement.Enums;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using CustomerManagerApp.Data;
 using Microsoft.Win32;
 using System;

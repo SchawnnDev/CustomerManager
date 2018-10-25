@@ -11,10 +11,15 @@ namespace CustomerManagement.Data
 
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public string FirstName { get; private set; }
-        public string Name { get; private set; }
+        public string FirstName { get; set; }
+        public string Name { get; set; }
         public string Address { get; set; }
         public string PostalCode { get; set; }
+
+        public ShippingAddress()
+        {
+
+        }
 
         public ShippingAddress(int customerId)
         {

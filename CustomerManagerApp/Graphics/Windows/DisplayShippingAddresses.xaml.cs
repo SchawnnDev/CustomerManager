@@ -24,6 +24,7 @@ namespace CustomerManagerApp.Graphics.Windows
             DataContext = new ShippingAddressListModel();
             Main = main;
             Customer = customer;
+            Title = $"Shipping Addresses from {customer.FirstName} {customer.Name}";
             Dispatcher.Invoke(() => Model.ShippingAddresses = new ObservableCollection<ShippingAddress>(customer.ShippingAddresses));
         }
 

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CustomerManagement.Data;
-using CustomerManagement.Enums;
 
 namespace CustomerManagement.Interfaces
 {
-    public interface IPlugin
+    public interface IDatabasePlugin
     {
 
         string GetName();
 
         string GetDataSource();
 
-        bool IsNeedingFile();
+        bool NeedsFile();
 
         string GetFileExtension();
 
@@ -37,11 +32,11 @@ namespace CustomerManagement.Interfaces
 
         List<ShippingAddress> GetShippingAddresses(int customerId);
 
-        List<Customer> LoadData();
+        List<Customer> GetCustomers();
 
-        int SaveShippingAddressesToDb(List<ShippingAddress> shippingAddresses);
+        int SaveShippingAddresses(List<ShippingAddress> shippingAddresses);
 
-        int SaveCustomersToDb(List<Customer> customers);
+        int SaveCustomers(List<Customer> customers);
 
     }
 }

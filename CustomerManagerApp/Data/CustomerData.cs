@@ -1,5 +1,5 @@
 ﻿using CustomerManagement.Data;
-using CustomerManager.Data;
+using CustomerManagement.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +13,12 @@ namespace CustomerManagerApp.Data
     {
 
         public static List<Customer> Customers { get; set; }
+        private static MainWindow MainWindow { get; set; }
 
-        public static void Initialize()
+        public static void Initialize(MainWindow main)
         {
-            Customers = PluginManager.GetActivePlugin().LoadData();
+            Customers = PluginManager.GetActivePlugin().GetCustomers();
+            MainWindow = main;
         }
 
         public static void Clear()
@@ -26,7 +28,17 @@ namespace CustomerManagerApp.Data
 
         public static bool Contains(Customer customer) => DataManager.Contains(Customers, customer);
 
-        public static void AddWithoutDoubles(List<Customer> customers) => DataManager.AddWithoutDoubles(Customers, customers);
+        public static void AddWithoutDoubles(List<Customer> customers)
+        {
+
+            foreach (var customer in customers)
+            {
+                if(Contains(customer)) continue;
+                Add(customer);
+                MainWindow.AddCustomer(customer);
+            }
+
+        }
 
         public static ShippingAddress FindShippingAddress(int id) => DataManager.FindShippingAddress(Customers, id);
 
@@ -37,6 +49,8 @@ namespace CustomerManagerApp.Data
             if (!Contains(customer))
                 Customers.Add(customer);
         }
+
+
 
         public static void Add(List<Customer> customers)
         {
