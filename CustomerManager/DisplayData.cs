@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManagement
+namespace CustomerManager
 {
     class DisplayData
     {
@@ -22,7 +22,7 @@ namespace CustomerManagement
 
             foreach (var customer in customers)
             {
-                bool post = true;
+                var post = true;
                 if (customer.HasShippingAddresses())
                 {
                     if (customer.ShippingAddresses.Count != 1)
@@ -38,9 +38,9 @@ namespace CustomerManagement
                 else
                     data.Add(AddToArray(customer.ToArray(), false, Cross(), Cross(), Cross()));
 
-                if (post)
-                    foreach (var address in customer.ShippingAddresses)
-                        data.Add(AddToArray(address.ToArray(), true, customer.Id.ToString(), ArrowDownRight(), ArrowDownRight(), ArrowDownRight(), ArrowDownRight(), ArrowDownRight()));
+                if (!post) continue;
+                foreach (var address in customer.ShippingAddresses)
+                    data.Add(AddToArray(address.ToArray(), true, customer.Id.ToString(), ArrowDownRight(), ArrowDownRight(), ArrowDownRight(), ArrowDownRight(), ArrowDownRight()));
 
             }
 
@@ -52,7 +52,7 @@ namespace CustomerManagement
 
         private static string[] AddToArray(string[] array, bool before, params string[] add)
         {
-            List<string> list = new List<string>(array);
+            var list = new List<string>(array);
 
             if (before)
                 list.InsertRange(0, add);

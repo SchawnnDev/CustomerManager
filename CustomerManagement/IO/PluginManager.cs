@@ -23,7 +23,7 @@ namespace CustomerManagement.IO
             if (!Directory.Exists(path)) return;
 
             var assemblies = new List<Assembly>();
-            assemblies.AddRange(Directory.GetFiles(path, "*.dll").Select(dllFile => Assembly.Load(AssemblyName.GetAssemblyName(dllFile))));
+            assemblies.AddRange(Directory.GetFiles(path, "*Plugin.dll").Select(dllFile => Assembly.Load(AssemblyName.GetAssemblyName(dllFile))));
 
             var pluginTypes = (from assembly in assemblies
                                where assembly != null
